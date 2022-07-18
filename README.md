@@ -10,7 +10,7 @@ mongodb
 baenaern
 프레임워크 : express
 
-배포 : GCP, serverless
+배포 : AWS, serverless
 
 ### Todo
 
