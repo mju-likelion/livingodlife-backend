@@ -9,9 +9,8 @@ mongodb
 데이터베이스 : mongoose
 baenaern
 프레임워크 : express
-e aernaer
-배포 : AW aerherS , serverless
-naern
+
+배포 : GCP, serverless
 
 ### Todo
 
