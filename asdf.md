@@ -1,18 +1,13 @@
-### Infrastructure
+MySQL
 
-#### Database
-
-mongodb
-
-#### Stack
+mongodb << 무료로 24시간 돌아가는 서버를 쓸수가있어요
 
 데이터베이스 : mongoose
-
 프레임워크 : express
 
 배포 : AWS, serverless
 
-### Todo
+기능
 
 - [ ] 유저 로그인
 - [ ] 유저 회원가입
