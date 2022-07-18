@@ -1,4 +1,9 @@
 import mongoose from "mongoose";
+//모델들 여기에 임포트하는거 맞나요??
+import "./models/Challenges";
+import "./models/Clients";
+import "./models/Routines";
+import "./models/CertifyingChallenges";
 
 mongoose.connect(
   "mongodb+srv://livingodlife:FnjzDCcLuSholnnX@cluster0.rvzulm5.mongodb.net/?retryWrites=true&w=majority"
