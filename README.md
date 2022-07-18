@@ -7,7 +7,6 @@ mongodb
 #### Stack
 
 데이터베이스 : mongoose
-baenaern
 프레임워크 : express
 
 배포 : AWS, serverless
