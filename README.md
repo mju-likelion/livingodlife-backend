@@ -10,7 +10,7 @@ mongodb
 
 프레임워크 : express
 
-배포 : AWS, serverless
+배포 : GCP, serverless
 
 ### Todo
 
