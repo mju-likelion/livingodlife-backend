@@ -9,13 +9,13 @@ mongodb
 데이터베이스 : mongoose
 프레임워크 : express
 
-배포 : AWS, serverless
+배포 : AWS, serverless, atlas
 
 ### Todo
 
-- [ ] 유저 로그인
+- [X] 유저 로그인
 - [X] 유저 회원가입
-- [ ] 인가 미들웨어
+- [X] 인가 미들웨어
 - [ ] 이메일 인증
 
 - [ ] 챌린지 생성
