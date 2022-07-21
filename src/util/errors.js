@@ -39,6 +39,12 @@ const errors = {
     statusCode: 401,
     errorMsg: "잘못된 토큰",
   },
+
+  CHALLENGE_ALREADY_EXISTS: {
+    errorCode: "CHALLENGE_ALREADY_EXISTS",
+    statusCode: 400,
+    errorMsg: "이미 존재하는 챌린진입니다.",
+  },
 };
 
 export default errors;
