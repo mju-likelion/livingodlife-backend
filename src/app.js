@@ -1,9 +1,4 @@
 import mongoose from "mongoose";
-//모델들 여기에 임포트하는거 맞나요??
-import "./models/Challenges";
-import "./models/Clients";
-import "./models/Routines";
-import "./models/CertifyingChallenges";
 
 mongoose.connect(
   "mongodb+srv://livingodlife:FnjzDCcLuSholnnX@cluster0.rvzulm5.mongodb.net/?retryWrites=true&w=majority"
@@ -12,7 +7,17 @@ mongoose.connect(
 import express from "express";
 
 const app = express();
+app.use(express.json());
 
-app.listen(80, () => {
-  console.log("Server open at 80");
+import client from "./route/client";
+
+//회원가입,로그인
+import dotenv from "dotenv";
+dotenv.config();
+app.use("/client", client);
+
+app.use((err, req, res, next) => {
+  res.status(err.statusCode).send(err);
 });
+
+export default app;

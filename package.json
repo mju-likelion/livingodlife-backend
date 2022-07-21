@@ -24,9 +24,16 @@
   },
   "homepage": "https://github.com/livingodlife/livingodlife-backend#readme",
   "dependencies": {
+    "@types/express-validator": "^3.0.0",
+    "@types/http-errors": "^1.8.2",
+    "@types/http-status": "^1.1.2",
     "@types/mongoose": "^5.11.97",
     "cors": "^2.8.5",
+    "dotenv": "^16.0.1",
     "express": "^4.18.1",
+    "express-validator": "^6.14.2",
+    "http-errors": "^2.0.0",
+    "http-status": "^1.5.2",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.4.4"
   }
