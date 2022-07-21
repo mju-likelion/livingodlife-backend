@@ -122,8 +122,7 @@ const checkLogIn = async (req, res) => {
   } else {
     const token = jwt.sign(
       {
-        userEmail: clientcheck.email,
-        name: clientcheck.name,
+        id: clientcheck.id,
       },
       process.env.JWT_SECRET,
       {
@@ -137,8 +136,8 @@ const checkLogIn = async (req, res) => {
     });
   }
 };
-router.post(
-  "/login",
+router.put(
+  "/",
 
   body("email").exists(),
   body("password").exists(),

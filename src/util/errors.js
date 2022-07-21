@@ -12,7 +12,7 @@ const errors = {
 
   EMAIL_DOES_NOT_EXISTS: {
     errorCode: "EMAIL_DOES_NOT_EXISTS",
-    statusCode: 400,
+    statusCode: 404,
     errorMsg: "존재하지 않는 이메일입니다.",
   },
 
@@ -27,7 +27,7 @@ const errors = {
     statusCode: 400,
     errorMsg: "이미 존재하는 이름입니다.",
   },
-  
+
   TOKEN_EXPIRED: {
     errorCode: "TOKEN_EXPIRED",
     statusCode: 419,
@@ -43,7 +43,25 @@ const errors = {
   CHALLENGE_ALREADY_EXISTS: {
     errorCode: "CHALLENGE_ALREADY_EXISTS",
     statusCode: 400,
-    errorMsg: "이미 존재하는 챌린진입니다.",
+    errorMsg: "이미 존재하는 챌린지입니다.",
+  },
+
+  CHALLENGE_NOT_EXISTS: {
+    errorCode: "CHALLENGE_NOT_EXISTS",
+    statusCode: 404,
+    errorMsg: "존재하지 않은 챌린지입니다.",
+  },
+
+  CHALLENGE_ALREADY_PARTICIPATED: {
+    errorCode: "CHALLENGE_ALREADY_PARTICIPATED",
+    statusCode: 400,
+    errorMsg: "이미 참여하고 있는 챌린지입니다.",
+  },
+
+  CHALLENGE_ALREADY_NOT_PARTICIPATED: {
+    errorCode: "CHALLENGE_ALREADY_NOT_PARTICIPATED",
+    statusCode: 400,
+    errorMsg: "이미 참여하고 있지 않는 챌린지입니다.",
   },
 };
 

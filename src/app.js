@@ -18,11 +18,12 @@ dotenv.config();
 app.use("/client", client);
 
 //챌린지 생성
-import challenges from "./route/challenges"
+import challenges from "./route/challenges";
 app.use("/challenge", challenges);
 
 app.use((err, req, res, next) => {
-  res.status(err.statusCode | 500).send(err);
+  console.log(err);
+  res.status(err.statusCode || 500).send(err);
 });
 
 export default app;

@@ -1,5 +1,5 @@
-import e, { Router, Request, Response } from "express";
-import { body } from "express-validator";
+import { Router, Request, Response } from "express";
+import { body, param } from "express-validator";
 import httpStatus from "http-status";
 
 import validation from "../middleware/validation";
@@ -7,9 +7,9 @@ import asyncWrapper from "../util/asyncWrapper";
 import APIError from "../util/apiError";
 import errors from "../util/errors";
 import Challenge from "../models/challenge";
-import { ChallengeCertify } from "../models/challengeCertify";
 
 import { verifyToken } from "../middleware/verifyTK";
+import { Mongoose, Types } from "mongoose";
 
 const router = Router();
 
@@ -35,6 +35,9 @@ const createChallenge = async (req, res) => {
   challenge.challengeContents = challengeContents;
   challenge.challengeCategory = challengeCategory;
 
+  //verifyTK.js 확인
+  challenge.clients = [res.locals.client.id];
+
   await challenge.save();
 
   res.status(httpStatus.CREATED).json({
@@ -52,6 +55,105 @@ router.post(
   validation,
 
   asyncWrapper(createChallenge)
+);
+
+/**
+ *
+ * @param {Request} req
+ * @param {Response} res
+ */
+const participateChallenge = async (req, res) => {
+  const { challengeId } = req.params;
+
+  const challenge = await Challenge.findById(challengeId);
+
+  if (!challenge) {
+    throw new APIError(
+      errors.CHALLENGE_NOT_EXISTS.statusCode,
+      errors.CHALLENGE_NOT_EXISTS.errorCode,
+      errors.CHALLENGE_NOT_EXISTS.errorMsg
+    );
+  }
+
+  const challengeContainsClient = challenge.clients.find((id) =>
+    id.equals(res.locals.client.id)
+  );
+
+  if (challengeContainsClient) {
+    throw new APIError(
+      errors.CHALLENGE_ALREADY_PARTICIPATED.statusCode,
+      errors.CHALLENGE_ALREADY_PARTICIPATED.errorCode,
+      errors.CHALLENGE_ALREADY_PARTICIPATED.errorMsg
+    );
+  }
+
+  await Challenge.findByIdAndUpdate(challengeId, {
+    $push: {
+      clients: res.locals.client.id,
+    },
+  });
+
+  res.status(httpStatus.NO_CONTENT).send();
+};
+
+router.post(
+  "/:challengeId",
+
+  param("challengeId").exists(),
+  validation,
+
+  verifyToken,
+  asyncWrapper(participateChallenge)
+);
+
+/**
+ *
+ * @param {Request} req
+ * @param {Response} res
+ */
+
+//챌린지 탈퇴
+const exitChallenge = async (req, res) => {
+  const { challengeId } = req.params;
+
+  const challenge = await Challenge.findById(challengeId);
+  if (!challenge) {
+    throw new APIError(
+      errors.CHALLENGE_NOT_EXISTS.statusCode,
+      errors.CHALLENGE_NOT_EXISTS.errorCode,
+      errors.CHALLENGE_NOT_EXISTS.errorMsg
+    );
+  }
+
+  const challengeContainsClient = challenge.clients.find((id) =>
+    id.equals(res.locals.client.id)
+  );
+
+  if (!challengeContainsClient) {
+    throw new APIError(
+      errors.CHALLENGE_ALREADY_NOT_PARTICIPATED.statusCode,
+      errors.CHALLENGE_ALREADY_NOT_PARTICIPATED.errorCode,
+      errors.CHALLENGE_ALREADY_NOT_PARTICIPATED.errorMsg
+    );
+  }
+
+  await Challenge.findByIdAndUpdate(challengeId, {
+    //지정된 항목 제거
+    $pull: {
+      clients: res.locals.client.id,
+    },
+  });
+  res.status(httpStatus.NO_CONTENT).send();
+};
+
+router.delete(
+  "/:challengeId",
+  verifyToken,
+
+  param("challengeId").exists(),
+  validation,
+
+  asyncWrapper(exitChallenge)
 );
 
 //테스트
