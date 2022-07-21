@@ -12,7 +12,6 @@ import errors from "../util/errors";
 import jwt from "jsonwebtoken";
 import { verifyToken } from "../middleware/verifyTK";
 
-
 const router = Router();
 
 // 회원가입
@@ -96,7 +95,7 @@ router.post(
 const checkLogIn = async (req, res) => {
   const { email, password } = req.body;
   // 이메일이 존재하는지 확인
-  if (!await Client.exists({ email })) {
+  if (!(await Client.exists({ email }))) {
     throw new APIError(
       errors.EMAIL_DOES_NOT_EXISTS.statusCode,
       errors.EMAIL_DOES_NOT_EXISTS.errorCode,
@@ -109,47 +108,35 @@ const checkLogIn = async (req, res) => {
     .update(password)
     .digest("hex");
 
-  let clientcheck = await Client.findOne({ email: email, password: hashedPassword })  
+  let clientcheck = await Client.findOne({
+    email: email,
+    password: hashedPassword,
+  });
 
-  if(!clientcheck) {
+  if (!clientcheck) {
     throw new APIError(
       errors.WRONG_PASSWORD.statusCode,
       errors.WRONG_PASSWORD.errorCode,
       errors.WRONG_PASSWORD.errorMsg
-    )
+    );
   } else {
-    const token = jwt.sign({  
-      userEmail: clientcheck[0]["email"],
-      name: clientcheck[0]["name"]
-    }, process.env.JWT_SECRET, { 
-      expiresIn: '1h', 
-      issuer: 'nodebird',
-    }); 
+    const token = jwt.sign(
+      {
+        userEmail: clientcheck.email,
+        name: clientcheck.name,
+      },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: "1h",
+        issuer: "nodebird",
+      }
+    );
+
     return res.json({
-        token,
+      token,
     });
   }
-
-  // if(clientcheck?.length) {
-  //   const token = jwt.sign({  
-  //     userEmail: clientcheck[0]["email"],
-  //     name: clientcheck[0]["name"]
-  //   }, process.env.JWT_SECRET, { 
-  //     expiresIn: '1h', 
-  //     issuer: 'nodebird',
-  //   }); 
-  //   return res.json(
-  //   {
-  //     token,
-  //   });
-  // } else {
-  //   throw new APIError(
-  //     errors.WRONG_PASSWORD.statusCode,
-  //     errors.WRONG_PASSWORD.errorCode,
-  //     errors.WRONG_PASSWORD.errorMsg
-  //   )
-  // }
-}
+};
 router.post(
   "/login",
 
@@ -158,10 +145,10 @@ router.post(
   validation,
 
   asyncWrapper(checkLogIn)
-)
+);
 
 //테스트
-router.get('/test',verifyToken,(req,res) => {
+router.get("/test", verifyToken, (req, res) => {
   res.json(req.decoded);
 });
 
