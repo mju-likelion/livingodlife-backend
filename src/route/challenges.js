@@ -191,61 +191,53 @@ const certifyingChallenge = async(req,res) => {
         );
     }
 
-    res.send(challenge);
-    // const client = await challenge.findById({
-    //     author: res.locals.client.id
-    // })
-    // const challengecertify = await client.find({
-    //     dateCreated: date,
-    // });
+   // 오늘 작성된 챌린지 인증글이 있는지 확인
+   // 오늘 날짜, 챌린지 아이디, 고객 아이디로 검색.
+    const challengecertify = await ChallengeCertify.findOne({
+        dateCreated: date,
+        challengeId: challengeId,
+        author: res.locals.client.id,
+    });
 
-    //오늘 작성된 챌린지 인증글이 있는지 확인
-    //오늘 날짜, 챌린지 아이디, 고객 아이디로 검색.
-    // const challengecertify = await ChallengeCertify.findOne({
-    //     dateCreated: date,
-    //     challengeId: challengeId,
-    //     author: res.locals.client.id,
-    // });
+    if(challengecertify) {
+        throw new APIError(
+            errors.ALREADY_ATHENTICATED.statusCode,
+            errors.ALREADY_ATHENTICATED.errorCode,
+            errors.ALREADY_ATHENTICATED.errorMsg
+        );
+    }
 
-    // if(challengecertify) {
-    //     throw new APIError(
-    //         errors.ALREADY_ATHENTICATED.statusCode,
-    //         errors.ALREADY_ATHENTICATED.errorCode,
-    //         errors.ALREADY_ATHENTICATED.errorMsg
-    //     );
-    // }
+    const challengeCertify = new ChallengeCertify();
+    challengeCertify.imageUrl = imageUrl;
+    challengeCertify.certifyingContents = certifyingContents;
+    challengeCertify.author = res.locals.client.name;
+    challengeCertify.dateCreated = nowDate();
 
-    // const challengeCertify = new ChallengeCertify();
-    // challengeCertify.imageUrl = imageUrl;
-    // challengeCertify.certifyingContents = certifyingContents;
-    // challengeCertify.author = res.locals.client.name;
-    // challengeCertify.dateCreated = nowDate();
+    await challengeCertify.save()
 
-    // await challengeCertify.save()
+    const filter = {
+        challengeId: challengeId,
+        writer: res.locals.client.id
+    }
+    //인증글 스키마에 이미 참여했으면 1일 누적, 처음이면 1일 시작
+    const accumlate = await AccumlateCertifies.findOne(filter)
 
-    // const filter = {
-    //     challengeId: challengeId,
-    //     writer: res.locals.client.id
-    // }
-    // //인증글 스키마에 이미 참여했으면 1일 누적, 처음이면 1일 시작
-    // const accumlate = await AccumlateCertifies.findOne(filter)
+    if(accumlate) {
+        let accumlateInfo = await AccumlateCertifies.findOne(filter)
+        await AccumlateCertifies.findOneAndUpdate(filter,
+            {
+                challengeCount: accumlateInfo.challengeCount + 1
+            }
+        )
+    }
 
-    // if(accumlate) {
-    //     let accumlateInfo = await AccumlateCertifies.findOne(filter)
-    //     await AccumlateCertifies.findOneAndUpdate(filter,
-    //         {
-    //             challengeCount: accumlateInfo.challengeCount + 1
-    //         }
-    //     )
-    // }
+    const accumlatecertifies = new AccumlateCertifies(); 
+    accumlatecertifies.challengeId = challengeId;
+    accumlatecertifies.writer = res.locals.client.name;
 
-    // const accumlatecertifies = new AccumlateCertifies(); 
-    // accumlatecertifies.challengeId = challengeId;
-    // accumlatecertifies.writer = res.locals.client.name;
+    await accumlatecertifies.save();
 
-    // await accumlatecertifies.save();
-
-    //res.status(httpStatus.NO_CONTENT).send('성공');
+    res.status(httpStatus.NO_CONTENT).send('성공');
 
 }
 
