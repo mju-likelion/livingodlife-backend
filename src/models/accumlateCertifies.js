@@ -3,19 +3,27 @@ import mongoose from "mongoose";
 
 const accumlateChallengesSchema = new mongoose.Schema({
     //챌린지 아이디
-    challengeId: [mongoose.Schema.Types.ObjectId],
+    challengeId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "challenges"
+    },
     
     // 누적 정보
     challengeCount: {
-      type: String,
+      type: Number,
+      default: 1,
     },
   
-    // 글 작성자
-    writer: {
+    // 글 작성자 아이디
+    writerId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Clients",
+      ref: "clients",
     },
   
+    // 글 작성자 이름
+    writerName: {
+      type: String
+    },
   });
 
   const AccumlateCertifies = mongoose.model(

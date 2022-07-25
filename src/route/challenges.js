@@ -6,7 +6,6 @@ import validation from "../middleware/validation";
 import asyncWrapper from "../util/asyncWrapper";
 import APIError from "../util/apiError";
 import errors from "../util/errors";
-import nowDate from "../nowdate";
 
 import Challenge from "../models/challenge";
 import ChallengeCertify from "../models/challengeCertify";
@@ -177,11 +176,11 @@ router.get("/testaccumlate", verifyToken, async (req, res) => {
 const certifyingChallenge = async(req,res) => {
     const { challengeId } = req.params;
     const { imageUrl, certifyingContents } = req.body;
-    let date = nowDate();
-    
-    const challenge = await Challenge.findOne({
-        challengeId : challengeId
-    });
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+  
+    const challenge = await Challenge.findById(challengeId);
+
 
     if (!challenge) {
         throw new APIError(
@@ -191,54 +190,56 @@ const certifyingChallenge = async(req,res) => {
         );
     }
 
-   // 오늘 작성된 챌린지 인증글이 있는지 확인
-   // 오늘 날짜, 챌린지 아이디, 고객 아이디로 검색.
-    // const challengecertify = await ChallengeCertify.findOne({
-    //     dateCreated: date,
-    //     challengeId: challengeId,
-    //     author: res.locals.client.id,
-    // });
+//    오늘 작성된 챌린지 인증글이 있는지 확인
+//    오늘 날짜, 챌린지 아이디, 고객 아이디로 검색.
+    const challengecertify = await ChallengeCertify.findOne({
+        dateCreated: today,
+        challengeId: challengeId,
+        authorId: res.locals.client.id,
+    });
 
-    // if(challengecertify) {
-    //     throw new APIError(
-    //         errors.ALREADY_ATHENTICATED.statusCode,
-    //         errors.ALREADY_ATHENTICATED.errorCode,
-    //         errors.ALREADY_ATHENTICATED.errorMsg
-    //     );
-    // }
+    if(challengecertify) {
+        throw new APIError(
+            errors.ALREADY_ATHENTICATED.statusCode,
+            errors.ALREADY_ATHENTICATED.errorCode,
+            errors.ALREADY_ATHENTICATED.errorMsg
+        );
+    }
 
-    // const challengeCertify = new ChallengeCertify();
-    // challengeCertify.imageUrl = imageUrl;
-    // challengeCertify.certifyingContents = certifyingContents;
-    // challengeCertify.author = res.locals.client.name;
-    // challengeCertify.dateCreated = nowDate();
+    const challengeCertify = new ChallengeCertify();
+    challengeCertify.imageUrl = imageUrl;
+    challengeCertify.certifyingContents = certifyingContents;
+    challengeCertify.authorId = res.locals.client.id;
+    challengeCertify.authorName = res.locals.client.name;
+    challengeCertify.dateCreated = today;
+    challengeCertify.challengeId = challengeId;
 
-    // await challengeCertify.save()
+    await challengeCertify.save()
 
-    // const filter = {
-    //     challengeId: challengeId,
-    //     writer: res.locals.client.id
-    // }
-    // //인증글 스키마에 이미 참여했으면 1일 누적, 처음이면 1일 시작
-    // const accumlate = await AccumlateCertifies.findOne(filter)
+    const filter = {
+        challengeId: challengeId,
+        writerId: res.locals.client.id
+    }
 
-    // if(accumlate) {
-    //     let accumlateInfo = await AccumlateCertifies.findOne(filter)
-    //     await AccumlateCertifies.findOneAndUpdate(filter,
-    //         {
-    //             challengeCount: accumlateInfo.challengeCount + 1
-    //         }
-    //     )
-    // }
+    //인증글 스키마에 이미 참여했으면 1일 누적, 처음이면 1일 시작
+    const accumlate = await AccumlateCertifies.findOne(filter)
 
-    // const accumlatecertifies = new AccumlateCertifies(); 
-    // accumlatecertifies.challengeId = challengeId;
-    // accumlatecertifies.writer = res.locals.client.name;
-
-    // await accumlatecertifies.save();
-
-    res.status(httpStatus.NO_CONTENT).send('성공');
-
+    if(accumlate) {
+        let accumlateInfo = await AccumlateCertifies.findOne(filter)
+        await AccumlateCertifies.findOneAndUpdate(filter,
+            {
+                challengeCount: accumlateInfo.challengeCount + 1
+            }
+        )
+    } else {
+        const accumlatecertifies = new AccumlateCertifies(); 
+        accumlatecertifies.challengeId = challengeId;
+        accumlatecertifies.writerId = res.locals.client.id;
+        accumlatecertifies.writerName = res.locals.client.name;
+    
+        await accumlatecertifies.save();
+    }
+    res.send('성공')
 }
 
 router.post(
@@ -257,5 +258,16 @@ router.get("/test1", async (req, res) => {
     let date = nowDate();
     res.json({'날짜':date});
 });
+
+//챌린지인증글 모두 조회
+router.get("/challengecertify", async(req,res) => {
+    let write = await ChallengeCertify.find();
+    res.send(write);
+})
+//챌린지 누적 정보 모두 조회
+router.get("/accumulate", async(req,res) => {
+    let write = await AccumlateCertifies.find();
+    res.send(write);
+})
 
 export default router;

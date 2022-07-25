@@ -13,10 +13,15 @@ const certifyingChallengesSchema = new mongoose.Schema({
     type: String,
   },
 
-  // 글 작성자
-  author: {
+  // 글 작성자 아이디
+  authorId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "clients",
+  },
+  
+  //글 작성자 이름
+  authorName: {
+    type: String,
   },
 
   //작성 날짜
