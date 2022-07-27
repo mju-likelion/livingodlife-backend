@@ -64,6 +64,36 @@ const errors = {
     errorMsg: "이미 참여하고 있지 않는 챌린지입니다.",
   },
 
+  ROUTINE_NOT_EXISTS: {
+    errorCode: "ROUTINE_NOT_EXISTS",
+    statusCode: 404,
+    errorMsg: "존재하지 않는 루틴입니다",
+  },
+
+  ROUTINE_NAME_ALREADY_EXISTS: {
+    errorCode: "ROUTINE_NAME_ALREADY_EXISTS",
+    statusCode: 400,
+    errorMsg: "이미 존재하는 루틴 이름입니다",
+  },
+
+  ROUTINE_NAME_ALREADY_PARTICIPATE: {
+    errorCode: "ROUTINE_NAME_ALREADY_PARTICIPATE",
+    statusCode: 400,
+    errorMsg: "이미 참가하고 있는 루틴입니다",
+  },
+
+  ROUTINE_NAME_ALREADY_NOT_PARTICIPATE: {
+    errorCode: "ROUTINE_NAME_ALREADY_NOT_PARTICIPATE",
+    statusCode: 400,
+    errorMsg: "이미 참가하고 있지 않는 루틴입니다",
+  },
+
+  ROUTINE_ALREADY_COMPLETED: {
+    errorCode: "ROUTINE_ALREADY_COMPLETED",
+    statusCode: 400,
+    errorMsg: "이미 완료한 루틴입니다",
+  },
+  
   ALREADY_ATHENTICATED: {
     errorCode: "ALREADY_ATHENTICATED",
     statusCode: 400,

@@ -21,6 +21,9 @@ app.use("/client", client);
 import challenges from "./route/challenges";
 app.use("/challenge", challenges);
 
+import routines from "./route/routine";
+app.use("/routine", routines);
+
 app.use((err, req, res, next) => {
   console.log(err);
   res.status(err.statusCode || 500).send(err);
