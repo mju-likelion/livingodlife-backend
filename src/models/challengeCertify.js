@@ -6,7 +6,6 @@ const certifyingChallengesSchema = new mongoose.Schema({
   // 이미지 주소
   imageUrl: {
     type: String,
-    default: "기본 이미지 경로로 나중에 수정",
   },
 
   // 글
@@ -14,16 +13,26 @@ const certifyingChallengesSchema = new mongoose.Schema({
     type: String,
   },
 
-  // 글 작성자
-  author: {
+  // 글 작성자 아이디
+  authorId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Clients",
+    ref: "clients",
+  },
+  
+  //글 작성자 이름
+  authorName: {
+    type: String,
   },
 
-  // 누적 정보 -> 랭킹
-  accumulate: {
-    type: Number,
-    default: 0,
+  //작성 날짜
+  dateCreated: {
+    type: Date,
+  },
+
+  //챌린지 아이디
+  challengeId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "challenges"
   },
 });
 

@@ -63,6 +63,13 @@ const errors = {
     statusCode: 400,
     errorMsg: "이미 참여하고 있지 않는 챌린지입니다.",
   },
+
+  ALREADY_ATHENTICATED: {
+    errorCode: "ALREADY_ATHENTICATED",
+    statusCode: 400,
+    errorMsg: "이미 인증되었습니다.",
+  },
+
 };
 
 export default errors;
