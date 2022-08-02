@@ -11,12 +11,13 @@ import RoutineCertify from "../models/routineCertify";
 
 const app = Router();
 
+//루틴 생성
+
 /**
  *
  * @param {Request} req
  * @param {Response} res
  */
-//루틴 생성
 const createRoutine = async (req, res) => {
   const { routineName, routineContents, routinePlan } = req.body;
 
@@ -39,12 +40,13 @@ const createRoutine = async (req, res) => {
   res.status(NO_CONTENT).send();
 };
 
+//루틴 참여
+
 /**
  *
  * @param {Request} req
  * @param {Response} res
  */
-//루틴 참여
 const participateRoutine = async (req, res) => {
   const { routineId } = req.params;
 
@@ -79,12 +81,13 @@ const participateRoutine = async (req, res) => {
   res.status(NO_CONTENT).send();
 };
 
+//루틴 탈퇴
+
 /**
  *
  * @param {Request} req
  * @param {Response} res
  */
-//루틴 탈퇴
 const exitRoutine = async (req, res) => {
   const { routineId } = req.params;
 
@@ -119,12 +122,13 @@ const exitRoutine = async (req, res) => {
   res.status(NO_CONTENT).send();
 };
 
+//루틴 완료
+
 /**
  *
  * @param {Request} req
  * @param {Response} res
  */
-//루틴 완료
 const completeRoutine = async (req, res) => {
   const { routineId } = req.params;
 
@@ -175,12 +179,13 @@ const completeRoutine = async (req, res) => {
   res.status(httpStatus.NO_CONTENT).send();
 };
 
+//루틴조회
+
 /**
  *
  * @param {Request} req
  * @param {Response} res
  */
-//루틴조회
 const getRoutine = async (req, res) => {
   const routines = await Routine.find({
     routineClients: {
@@ -191,12 +196,13 @@ const getRoutine = async (req, res) => {
   res.status(httpStatus.OK).json({ routines });
 };
 
+//완료한 루틴 조회
+
 /**
  *
  * @param {Request} req
  * @param {Response} res
  */
-//완료한 루틴 조회
 const getCompletedRoutine = async (req, res) => {
   const { clientId, routineId } = req.params;
 

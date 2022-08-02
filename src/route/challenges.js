@@ -21,7 +21,6 @@ const router = Router();
  * @param {Request} req
  * @param {Response} res
  */
-
 const createChallenge = async (req, res) => {
   const { challengeName, challengeContents, challengeCategory } = req.body;
   // 챌린지가 존재하는지 확인
@@ -110,13 +109,13 @@ router.post(
   asyncWrapper(participateChallenge)
 );
 
+//챌린지 탈퇴
+
 /**
  *
  * @param {Request} req
  * @param {Response} res
  */
-
-//챌린지 탈퇴
 const exitChallenge = async (req, res) => {
   const { challengeId } = req.params;
 
