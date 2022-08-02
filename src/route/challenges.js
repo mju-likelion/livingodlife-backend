@@ -97,7 +97,7 @@ const participateChallenge = async (req, res) => {
     },
   });
 
-  res.status(NO_CONTENT).send();
+  res.status(httpStatus.CREATED).send();
 };
 
 router.post(
