@@ -11,6 +11,8 @@ import RoutineCertify from "../models/routineCertify";
 
 const app = Router();
 
+//루틴 생성
+
 /**
  *
  * @param {Request} req
@@ -37,6 +39,8 @@ const createRoutine = async (req, res) => {
 
   res.status(NO_CONTENT).send();
 };
+
+//루틴 참여
 
 /**
  *
@@ -77,6 +81,8 @@ const participateRoutine = async (req, res) => {
   res.status(NO_CONTENT).send();
 };
 
+//루틴 탈퇴
+
 /**
  *
  * @param {Request} req
@@ -115,6 +121,8 @@ const exitRoutine = async (req, res) => {
 
   res.status(NO_CONTENT).send();
 };
+
+//루틴 완료
 
 /**
  *
@@ -171,6 +179,8 @@ const completeRoutine = async (req, res) => {
   res.status(httpStatus.NO_CONTENT).send();
 };
 
+//루틴조회
+
 /**
  *
  * @param {Request} req
@@ -185,6 +195,8 @@ const getRoutine = async (req, res) => {
 
   res.status(httpStatus.OK).json({ routines });
 };
+
+//완료한 루틴 조회
 
 /**
  *
