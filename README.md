@@ -11,6 +11,14 @@ mongodb
 
 배포 : AWS, serverless, atlas
 
+#### HOW TO GET STARTED
+```bash
+git clone https://github.com/mju-likelion/livingodlife-backend.git
+cd livingodlife-backend
+npm install
+npm run dev
+```
+
 ### Todo
 
 #### 유저
