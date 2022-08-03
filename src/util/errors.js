@@ -76,14 +76,14 @@ const errors = {
     errorMsg: "이미 존재하는 루틴 이름입니다",
   },
 
-  ROUTINE_NAME_ALREADY_PARTICIPATE: {
-    errorCode: "ROUTINE_NAME_ALREADY_PARTICIPATE",
+  ROUTINE_ALREADY_PARTICIPATE: {
+    errorCode: "ROUTINE_ALREADY_PARTICIPATE",
     statusCode: 400,
     errorMsg: "이미 참가하고 있는 루틴입니다",
   },
 
-  ROUTINE_NAME_ALREADY_NOT_PARTICIPATE: {
-    errorCode: "ROUTINE_NAME_ALREADY_NOT_PARTICIPATE",
+  ROUTINE_ALREADY_NOT_PARTICIPATE: {
+    errorCode: "ROUTINE_ALREADY_NOT_PARTICIPATE",
     statusCode: 400,
     errorMsg: "이미 참가하고 있지 않는 루틴입니다",
   },
@@ -93,13 +93,12 @@ const errors = {
     statusCode: 400,
     errorMsg: "이미 완료한 루틴입니다",
   },
-  
+
   ALREADY_ATHENTICATED: {
     errorCode: "ALREADY_ATHENTICATED",
     statusCode: 400,
     errorMsg: "이미 인증되었습니다.",
   },
-
 };
 
 export default errors;
