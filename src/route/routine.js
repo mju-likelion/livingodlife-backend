@@ -66,9 +66,9 @@ const participateRoutine = async (req, res) => {
 
   if (routineContainsClient) {
     throw new APIError(
-      errors.ROUTINE_NAME_ALREADY_PARTICIPATE.statusCode,
-      errors.ROUTINE_NAME_ALREADY_PARTICIPATE.errorCode,
-      errors.ROUTINE_NAME_ALREADY_PARTICIPATE.errorMsg
+      errors.ROUTINE_ALREADY_PARTICIPATE.statusCode,
+      errors.ROUTINE_ALREADY_PARTICIPATE.errorCode,
+      errors.ROUTINE_ALREADY_PARTICIPATE.errorMsg
     );
   }
 
@@ -107,9 +107,9 @@ const exitRoutine = async (req, res) => {
 
   if (!routineContainsClient) {
     throw new APIError(
-      errors.ROUTINE_NAME_ALREADY_NOT_PARTICIPATE.statusCode,
-      errors.ROUTINE_NAME_ALREADY_NOT_PARTICIPATE.errorCode,
-      errors.ROUTINE_NAME_ALREADY_NOT_PARTICIPATE.errorMsg
+      errors.ROUTINE_ALREADY_NOT_PARTICIPATE.statusCode,
+      errors.ROUTINE_ALREADY_NOT_PARTICIPATE.errorCode,
+      errors.ROUTINE_ALREADY_NOT_PARTICIPATE.errorMsg
     );
   }
 
