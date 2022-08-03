@@ -146,11 +146,11 @@ const completeRoutine = async (req, res) => {
     id.equals(res.locals.client.id)
   );
 
-  if (routineContainsClient) {
+  if (!routineContainsClient) {
     throw new APIError(
-      errors.ROUTINE_NAME_ALREADY_NOT_PARTICIPATE.statusCode,
-      errors.ROUTINE_NAME_ALREADY_NOT_PARTICIPATE.errorCode,
-      errors.ROUTINE_NAME_ALREADY_NOT_PARTICIPATE.errorMsg
+      errors.ROUTINE_ALREADY_NOT_PARTICIPATE.statusCode,
+      errors.ROUTINE_ALREADY_NOT_PARTICIPATE.errorCode,
+      errors.ROUTINE_ALREADY_NOT_PARTICIPATE.errorMsg
     );
   }
 
