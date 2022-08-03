@@ -4,6 +4,36 @@ const errors = {
     statusCode: 400,
   },
 
+  NOT_FRIEND_ME: {
+    errorCode: "NOT_FRIEND_ME",
+    statusCode: 400,
+    errorMsg: "스스로를 친구로 추가할 수 없습니다.",
+  },
+
+  CLIENT_NOT_EXISTS: {
+    errorCode: "CLIENT_NOT_EXISTS",
+    statusCode: 400,
+    errorMsg: "존재하지 않는 유저입니다.",
+  },
+
+  INVALID_ERROR: {
+    errorCode: "INVALID_ERROR",
+    statusCode: 400,
+    errorMsg: "INVALID ERROR",
+  },
+
+  ALREADY_FRIEND: {
+    errorCode: "ALREADY_FRIEND",
+    statusCode: 400,
+    errorMsg: "이미 친구입니다.",
+  },
+
+  ALREADY_NOT_FRIEND: {
+    errorCode: "ALREADY_NOT_FRIEND",
+    statusCode: 400,
+    errorMsg: "친구가 아닙니다.",
+  },
+
   EMAIL_ALREADY_EXISTS: {
     errorCode: "EMAIL_ALREADY_EXISTS",
     statusCode: 400,
@@ -31,13 +61,13 @@ const errors = {
   TOKEN_EXPIRED: {
     errorCode: "TOKEN_EXPIRED",
     statusCode: 419,
-    errorMsg: "토큰이 만료됨",
+    errorMsg: "토큰이 만료되었습니다.",
   },
 
   INVALID_TOKEN: {
     errorCode: "INVALID_TOKEN",
     statusCode: 401,
-    errorMsg: "잘못된 토큰",
+    errorMsg: "잘못된 토큰이 기입되었습니다.",
   },
 
   CHALLENGE_ALREADY_EXISTS: {
