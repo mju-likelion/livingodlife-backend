@@ -11,6 +11,7 @@ import asyncWrapper from "../util/asyncWrapper";
 
 const router = Router();
 
+//친구 추가
 /**
  *
  * @param {Request} req
@@ -36,6 +37,7 @@ const addFriend = async (req, res) => {
     );
   }
 
+  //만약 friend 스키마에 해당 유저가 존재 하지 않을경우 해당 유저아이디로 새로운 객체 생성
   if (!(await Friend.exists({ owner: clientId }))) {
     await Friend.create({ owner: clientId, friends: [] });
   }
@@ -65,6 +67,7 @@ router.post(
   asyncWrapper(addFriend)
 );
 
+//친구 삭제
 /**
  *
  * @param {Request} req
@@ -111,6 +114,7 @@ router.delete(
   asyncWrapper(removeFriend)
 );
 
+//친구 목록 조회
 /**
  *
  * @param {Request} req
@@ -122,7 +126,8 @@ const getFriends = async (req, res) => {
   if (!(await Friend.exists({ owner: clientId }))) {
     await Friend.create({ owner: clientId, friends: [] });
   }
-
+  
+  //해당 클라이언트의 객체 정보를 받아옴.
   const friendInstance = await Friend.findOne({ owner: clientId });
 
   res.status(httpStatus.OK).json({
