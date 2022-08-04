@@ -1,5 +1,5 @@
 import e, { Router, Request, Response } from "express";
-import { body } from "express-validator";
+import { body, param } from "express-validator";
 import httpStatus from "http-status";
 import crypto from "crypto";
 
@@ -136,13 +136,25 @@ const checkLogIn = async (req, res) => {
 };
 router.put(
   "/",
-
   body("email").exists(),
   body("password").exists(),
   validation,
-
   asyncWrapper(checkLogIn)
 );
+
+/**
+ *
+ * @param {Request} req
+ * @param {Response} res
+ */
+const getClient = async (req, res) => {
+  const { id } = req.params;
+
+  const client = await Client.findById(id);
+  res.status(httpStatus.OK).json({ client });
+};
+
+router.get("/:id", param("id"), validation, asyncWrapper(getClient));
 
 //테스트
 router.get("/test", verifyToken, (req, res) => {
