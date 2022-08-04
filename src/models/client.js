@@ -21,12 +21,6 @@ const clientSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-
-  // 생일
-  birthday: {
-    type: Date,
-    required: true,
-  },
 });
 
 const Client = mongoose.model("clients", clientSchema); //모델 이름이 Clients임을 선언함
