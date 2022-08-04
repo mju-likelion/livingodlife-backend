@@ -1,4 +1,4 @@
-### Infrastructure
+## Infrastructure
 
 #### Database
 
@@ -11,7 +11,7 @@ mongodb
 
 배포 : AWS, serverless, atlas
 
-#### HOW TO GET STARTED
+## HOW TO GET STARTED
 ```bash
 git clone https://github.com/mju-likelion/livingodlife-backend.git
 cd livingodlife-backend
@@ -19,13 +19,14 @@ npm install
 npm run dev
 ```
 
-### Todo
+## Todo
 
 #### 유저
 - [X] 유저 로그인
 - [X] 유저 회원가입
 - [X] 인가 미들웨어
 - [ ] 이메일 인증
+- [ ] 유저 조회
 
 #### 챌린지
 - [X] 챌린지 생성
@@ -44,9 +45,9 @@ npm run dev
 - [X] 루틴 완료 여부
 
 #### 친구
-- [ ] 친구 추가
-- [ ] 친구 삭제
-- [ ] 친구 목록 조회
+- [X] 친구 추가
+- [X] 친구 삭제
+- [X] 친구 목록 조회
 
 #### 피드
 - [ ] 피드 조회

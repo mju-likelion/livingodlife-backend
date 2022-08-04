@@ -11,6 +11,10 @@ import asyncWrapper from "../util/asyncWrapper";
 
 const router = Router();
 
+<<<<<<< HEAD
+=======
+//친구 추가
+>>>>>>> b66b1b472a53aea0d2757966463a109cd0946921
 /**
  *
  * @param {Request} req
@@ -36,6 +40,10 @@ const addFriend = async (req, res) => {
     );
   }
 
+<<<<<<< HEAD
+=======
+  //만약 friend 스키마에 해당 유저가 존재 하지 않을경우 해당 유저아이디로 새로운 객체 생성
+>>>>>>> b66b1b472a53aea0d2757966463a109cd0946921
   if (!(await Friend.exists({ owner: clientId }))) {
     await Friend.create({ owner: clientId, friends: [] });
   }
@@ -65,6 +73,10 @@ router.post(
   asyncWrapper(addFriend)
 );
 
+<<<<<<< HEAD
+=======
+//친구 삭제
+>>>>>>> b66b1b472a53aea0d2757966463a109cd0946921
 /**
  *
  * @param {Request} req
@@ -111,6 +123,10 @@ router.delete(
   asyncWrapper(removeFriend)
 );
 
+<<<<<<< HEAD
+=======
+//친구 목록 조회
+>>>>>>> b66b1b472a53aea0d2757966463a109cd0946921
 /**
  *
  * @param {Request} req
@@ -122,7 +138,12 @@ const getFriends = async (req, res) => {
   if (!(await Friend.exists({ owner: clientId }))) {
     await Friend.create({ owner: clientId, friends: [] });
   }
+<<<<<<< HEAD
 
+=======
+  
+  //해당 클라이언트의 객체 정보를 받아옴.
+>>>>>>> b66b1b472a53aea0d2757966463a109cd0946921
   const friendInstance = await Friend.findOne({ owner: clientId });
 
   res.status(httpStatus.OK).json({
