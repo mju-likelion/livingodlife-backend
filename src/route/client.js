@@ -151,10 +151,42 @@ const getClient = async (req, res) => {
   const { id } = req.params;
 
   const client = await Client.findById(id);
+
+  if (!client) {
+    throw new APIError(
+      errors.CLIENT_NOT_EXISTS.statusCode,
+      errors.CLIENT_NOT_EXISTS.errorCode,
+      errors.CLIENT_NOT_EXISTS.errorMsg
+    );
+  }
+
   res.status(httpStatus.OK).json({ client });
 };
 
 router.get("/:id", param("id"), validation, asyncWrapper(getClient));
+
+const getClientByName = async (req, res) => {
+  const { name } = req.params;
+
+  const client = await Client.findOne({ name });
+
+  if (!client) {
+    throw new APIError(
+      errors.CLIENT_NOT_EXISTS.statusCode,
+      errors.CLIENT_NOT_EXISTS.errorCode,
+      errors.CLIENT_NOT_EXISTS.errorMsg
+    );
+  }
+
+  res.status(httpStatus.OK).json({ client });
+};
+
+router.get(
+  "/name/:name",
+  param("name"),
+  validation,
+  asyncWrapper(getClientByName)
+);
 
 //테스트
 router.get("/test", verifyToken, (req, res) => {
