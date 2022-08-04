@@ -12,7 +12,7 @@ const errors = {
 
   CLIENT_NOT_EXISTS: {
     errorCode: "CLIENT_NOT_EXISTS",
-    statusCode: 400,
+    statusCode: 404,
     errorMsg: "존재하지 않는 유저입니다.",
   },
 
