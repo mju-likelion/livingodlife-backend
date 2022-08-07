@@ -43,6 +43,6 @@
     "serverless-plugin-include-dependencies": "^5.0.0",
     "serverless-webpack": "^5.8.0",
     "webpack": "^5.74.0",
-    "webpack-node-externals": "^3.0.0",
+    "webpack-node-externals": "^3.0.0"
   }
 }
