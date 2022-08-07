@@ -3,7 +3,6 @@ service: livingodlife-backend
 plugins:
   - serverless-offline
   - serverless-webpack
-  - serverless-plugin-include-dependencies
   - serverless-http
 provider:
   name: aws
