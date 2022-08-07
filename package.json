@@ -10,10 +10,7 @@
     "@babel/core": "^7.18.9",
     "@babel/node": "^7.18.9",
     "@babel/preset-env": "^7.18.9",
-    "nodemon": "^2.0.19",
-    "serverless-http": "^3.0.1",
-    "serverless-plugin-include-dependencies": "^5.0.0",
-    "serverless-webpack": "^5.8.0"
+    "nodemon": "^2.0.19"
   },
   "repository": {
     "type": "git",
