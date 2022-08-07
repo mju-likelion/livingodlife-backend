@@ -40,6 +40,7 @@
     "serverless": "^3.21.0",
     "serverless-http": "^3.0.1",
     "serverless-offline": "^9.1.6",
+    "serverless-plugin-include-dependencies": "^5.0.0",
     "serverless-webpack": "^5.8.0",
     "webpack": "^5.74.0",
     "webpack-node-externals": "^3.0.0"
