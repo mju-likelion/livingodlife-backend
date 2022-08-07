@@ -10,7 +10,8 @@
     "@babel/core": "^7.18.9",
     "@babel/node": "^7.18.9",
     "@babel/preset-env": "^7.18.9",
-    "nodemon": "^2.0.19"
+    "nodemon": "^2.0.19",
+    "serverless-webpack": "^5.8.0"
   },
   "repository": {
     "type": "git",
@@ -28,6 +29,7 @@
     "@types/http-errors": "^1.8.2",
     "@types/http-status": "^1.1.2",
     "@types/mongoose": "^5.11.97",
+    "babel-loader": "^8.2.5",
     "cors": "^2.8.5",
     "dotenv": "^16.0.1",
     "express": "^4.18.1",
@@ -35,6 +37,10 @@
     "http-errors": "^2.0.0",
     "http-status": "^1.5.2",
     "jsonwebtoken": "^8.5.1",
-    "mongoose": "^6.4.4"
+    "mongoose": "^6.4.4",
+    "serverless-http": "^3.0.1",
+    "serverless-offline": "^9.1.6",
+    "webpack": "^5.74.0",
+    "webpack-node-externals": "^3.0.0"
   }
 }
