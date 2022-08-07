@@ -3,7 +3,9 @@ service: livingodlife-backend
 plugins:
   - serverless-offline
   - serverless-webpack
-
+  - serevrless-http
+  - serverless-plugin-include-dependencies
+  - serverless-http
 provider:
   name: aws
   runtime: nodejs14.x
