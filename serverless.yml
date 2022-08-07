@@ -3,9 +3,7 @@ service: livingodlife-backend
 plugins:
   - serverless-offline
   - serverless-webpack
-  - serevrless-http
   - serverless-plugin-include-dependencies
-  - serverless-http
 provider:
   name: aws
   runtime: nodejs14.x
@@ -15,9 +13,12 @@ provider:
 custom:
   webpack:
     webpackConfig: "webpack.config.js" # Name of webpack configuration file
-    includeModules: false # Node modules configuration for packaging
+    includeModules: true # Node modules configuration for packaging
     packager: "npm" # Packager that will be used to package your external modules
     excludeFiles: src/**/*.test.js # Provide a glob for files to ignore
+
+package:
+  individually: true
 
 functions:
   app:

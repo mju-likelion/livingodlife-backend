@@ -6,13 +6,4 @@ module.exports = {
   target: "node",
   externals: [nodeExternals()],
   mode: slsw.lib.webpack.isLocal ? "development" : "production",
-  module: {
-    rules: [
-      {
-        loader: "babel-loader",
-        include: __dirname,
-        exclude: /node_modules/,
-      },
-    ],
-  },
 };
