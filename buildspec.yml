@@ -35,8 +35,6 @@ phases:
       - npm install serverless --global
   build:
     commands:
-      - serverless plugin install -n serevrless-http
-      - serverless plugin install -n serverless-plugin-include-dependencies
       - serverless deploy
       # - command
   #post_build:

@@ -37,11 +37,11 @@
     "http-status": "^1.5.2",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.4.4",
-    "serverless-offline": "^9.1.6",
-    "webpack": "^5.74.0",
-    "webpack-node-externals": "^3.0.0",
+    "serverless": "^3.21.0",
     "serverless-http": "^3.0.1",
-    "serverless-plugin-include-dependencies": "^5.0.0",
-    "serverless-webpack": "^5.8.0"
+    "serverless-offline": "^9.1.6",
+    "serverless-webpack": "^5.8.0",
+    "webpack": "^5.74.0",
+    "webpack-node-externals": "^3.0.0"
   }
 }
