@@ -1,23 +1,34 @@
 ## Infrastructure
 
 #### Database
-
-mongodb
+- MongoDB
 
 #### Stack
+- Mongoose
+- Serverless
+- Express
 
-데이터베이스 : mongoose
-프레임워크 : express
+#### CI/CD
+- AWS CodePipeline
 
-배포 : AWS, serverless, atlas
+## API Endpoint
+- [https://api.livingodlife.com/](https://api.livingodlife.com)
 
-## HOW TO GET STARTED
+## Commands
+
+#### How to get started
 ```bash
 git clone https://github.com/mju-likelion/livingodlife-backend.git
 cd livingodlife-backend
 npm install
 npm run dev
 ```
+
+#### Custom deploy
+````bash
+serverless deploy
+# before deploy, you have to configure credentials
+````
 
 ## Todo
 
