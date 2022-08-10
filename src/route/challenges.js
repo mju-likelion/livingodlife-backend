@@ -22,7 +22,7 @@ const router = Router();
  * @param {Response} res
  */
 const createChallenge = async (req, res) => {
-  const { challengeName, challengeContents, challengeCategory } = req.body;
+  const { challengeName, challengeCategory } = req.body;
   // 챌린지가 존재하는지 확인
   if (await Challenge.exists({ challengeName })) {
     throw new APIError(
@@ -34,7 +34,6 @@ const createChallenge = async (req, res) => {
 
   const challenge = new Challenge();
   challenge.challengeName = challengeName;
-  challenge.challengeContents = challengeContents;
   challenge.challengeCategory = challengeCategory;
 
   //verifyTK.js 확인
@@ -52,7 +51,6 @@ router.post(
   verifyToken,
 
   body("challengeName").exists(),
-  body("challengeContents").exists(),
   body("challengeCategory").exists(),
   validation,
 
