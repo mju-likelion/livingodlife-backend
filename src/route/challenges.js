@@ -165,11 +165,55 @@ router.get("/", verifyToken, async (req, res) => {
   res.status(httpStatus.OK).json(allChallenges);
 });
 
-//누적 정보 출력 테스트
+//해당 챌린지 랭킹 조회
+const getChallengeAccumulate = async (req, res) => {
+  const { challengeId } = req.body;
+  const challenge = await Challenge.findById(challengeId);
+
+  //해당 챌린지가 challenge객체 내 존재하는지
+  if (!challenge) {
+    throw new APIError(
+      errors.CHALLENGE_NOT_EXISTS.statusCode,
+      errors.CHALLENGE_NOT_EXISTS.errorCode,
+      errors.CHALLENGE_NOT_EXISTS.errorMsg
+    );
+  }
+
+  let allAccumlate = await AccumlateCertifies.find(
+    { challengeId : challengeId },
+    { challengeId: false, writerId: false, __v: false, _id: false}
+  );
+  allAccumlate.sort((a,b) =>  {
+    if (a.challengeCount < b.challengeCount) return 1;
+    if (a.challengeCount > b.challengeCount) return -1;
+  });
+
+  res.status(httpStatus.OK).json(allAccumlate);
+};
+  
+router.get(
+  "/getchallengerank", 
+  body("challengeId").exists(),
+  validation,
+  verifyToken,
+  asyncWrapper(getChallengeAccumulate)  
+);
+
+//챌린지 전체 누적 정보 출력
 router.get("/testaccumlate", verifyToken, async (req, res) => {
   let allAccumlate = await AccumlateCertifies.find();
   res.status(httpStatus.OK).json(allAccumlate);
 });
+
+//챌린지 누적정보 임의 조작 기능
+router.put("/manipulateAccumlate", verifyToken, async (req, res) => {
+  const { id } = req.body;
+  await AccumlateCertifies.updateOne(
+    {_id: id},
+    { $inc: { challengeCount: +1 }}
+  );
+  res.status(httpStatus.OK).send('누적정보 1 추가');
+})
 
 // 챌린지 인증하기
 const certifyingChallenge = async (req, res) => {
@@ -279,10 +323,6 @@ router.get(
   asyncWrapper(getCertifiedChallenge)
 );
 
-//챌린지 누적 정보 모두 조회
-router.get("/accumulate", async (req, res) => {
-  let write = await AccumlateCertifies.find();
-  res.send(write);
-});
+
 
 export default router;
