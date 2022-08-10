@@ -9,12 +9,6 @@ const challengesSchema = new mongoose.Schema({
     required: true,
   },
 
-  challengeContents: {
-    // 챌린지 내용
-    type: String,
-    required: true,
-  },
-
   challengeCategory: {
     // 챌린지 카테고리
     type: String,
