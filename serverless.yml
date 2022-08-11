@@ -10,6 +10,8 @@ provider:
   runtime: nodejs14.x
   stage: dev
   region: ap-northeast-2
+  environment:
+    JWT_SECRET_KEY: jwtsecret
 
 custom:
   webpack:
