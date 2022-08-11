@@ -4,11 +4,17 @@ plugins:
   - serverless-offline
   - serverless-webpack
   - serverless-plugin-include-dependencies
+
 provider:
   name: aws
   runtime: nodejs14.x
   stage: dev
   region: ap-northeast-2
+  
+package:
+  include:
+    - src/docs/**
+    - .env
 
 custom:
   webpack:
