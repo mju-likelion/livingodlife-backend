@@ -219,8 +219,11 @@ router.put("/manipulateAccumlate", verifyToken, async (req, res) => {
 const certifyingChallenge = async (req, res) => {
   const { challengeId } = req.params;
   const { imageUrl, certifyingContents } = req.body;
-  const today = new Date();
+  let today = new Date();
   today.setHours(0, 0, 0, 0);
+  const lastDay = new Date();
+  lastDay.setHours(0, 0, 0, 0);
+  lastDay.setDate(lastDay.getDate()-1);
 
   const challenge = await Challenge.findById(challengeId);
 
@@ -265,12 +268,24 @@ const certifyingChallenge = async (req, res) => {
 
   //인증글 스키마에 이미 참여했으면 1일 누적, 처음이면 1일 시작
   const accumlate = await AccumlateCertifies.findOne(filter);
-
   if (accumlate) {
-    let accumlateInfo = await AccumlateCertifies.findOne(filter);
-    await AccumlateCertifies.findOneAndUpdate(filter, {
-      challengeCount: accumlateInfo.challengeCount + 1,
-    });
+    const lastCertify = await ChallengeCertify.findOne(
+      { challengeId: challengeId,
+        writerId: res.locals.client.id,
+        dateCreated: lastDay
+      },);
+    if (lastCertify) {
+      await AccumlateCertifies.findOneAndUpdate(
+        filter,
+        { $inc: { challengeCount: +1 } }
+      );
+    }
+    else { 
+      await AccumlateCertifies.findOneAndUpdate(
+        filter,
+        { $set: { challengeCount: 1 } }
+      )
+    }
   } else {
     const accumlatecertifies = new AccumlateCertifies();
     accumlatecertifies.challengeId = challengeId;
@@ -301,28 +316,37 @@ router.get("/test1", async (req, res) => {
 
 //오늘 인증한 해당 챌린지 인증글 조회
 const getCertifiedChallenge = async (req, res) => {
-  const { clientId, challengeId } = req.params;
+  const { challengeId, authorId } = req.body;
 
   const today = new Date();
   today.setHours(0, 0, 0, 0);
+  today.setDate(today.getDate()+1);
 
-  const challenges = await ChallengeCertify.findOne({
-    dateCreated: today,
-    authorId: clientId,
-    challengeId,
-  });
-
-  res.status(httpStatus.OK).json({ completed: challenges ? true : false });
+  const challenges = await ChallengeCertify.findOne(
+    { dateCreated: today },
+    { authorId: authorId },
+    { challengeId: challengeId }
+  );
+res.status(httpStatus.OK).json(challenges);
 };
 
 router.get(
-  "/challengecertify/:challengeId/:clientId",
-  param("challengeId").exists(),
-  validation,
+  "/challengecertify",
   verifyToken,
+  body("challengeId").exists(),
+  body("authorId").exists(),
+  validation,
   asyncWrapper(getCertifiedChallenge)
 );
 
-
+//인증글 모두 조회 기능
+const getCertifies = async(req, res) => {
+  const allCertifies = await ChallengeCertify.find();
+  res.json(allCertifies);
+}
+router.get(
+  "/getcertifies",
+  asyncWrapper(getCertifies)
+);
 
 export default router;
