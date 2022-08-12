@@ -11,7 +11,7 @@ provider:
   stage: dev
   region: ap-northeast-2
   environment:
-    JWT_SECRET_KEY: jwtsecret
+    JWT_SECRET: jwtsecret
 
 custom:
   webpack:
