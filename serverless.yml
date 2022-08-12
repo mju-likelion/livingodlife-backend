@@ -10,11 +10,8 @@ provider:
   runtime: nodejs14.x
   stage: dev
   region: ap-northeast-2
-  
-package:
-  include:
-    - src/docs/**
-    - .env
+  environment:
+    JWT_SECRET: jwtsecret
 
 custom:
   webpack:
@@ -25,6 +22,9 @@ custom:
 
 package:
   individually: true
+  include:
+    - src/docs/**
+    - .env
 
 functions:
   app:
