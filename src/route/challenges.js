@@ -22,7 +22,7 @@ const router = Router();
  * @param {Response} res
  */
 const createChallenge = async (req, res) => {
-  const { challengeName, challengeCategory } = req.body;
+  const { challengeName, challengeContents, challengeCategory } = req.body;
   // 챌린지가 존재하는지 확인
   if (await Challenge.exists({ challengeName })) {
     throw new APIError(
@@ -34,6 +34,7 @@ const createChallenge = async (req, res) => {
 
   const challenge = new Challenge();
   challenge.challengeName = challengeName;
+  challenge.challengeContents = challengeContents;
   challenge.challengeCategory = challengeCategory;
 
   //verifyTK.js 확인
@@ -51,6 +52,7 @@ router.post(
   verifyToken,
 
   body("challengeName").exists(),
+  body("challengeContents").exists(),
   body("challengeCategory").exists(),
   validation,
 
@@ -163,18 +165,65 @@ router.get("/", verifyToken, async (req, res) => {
   res.status(httpStatus.OK).json(allChallenges);
 });
 
-//누적 정보 출력 테스트
+//해당 챌린지 랭킹 조회
+const getChallengeAccumulate = async (req, res) => {
+  const { challengeId } = req.body;
+  const challenge = await Challenge.findById(challengeId);
+
+  //해당 챌린지가 challenge객체 내 존재하는지
+  if (!challenge) {
+    throw new APIError(
+      errors.CHALLENGE_NOT_EXISTS.statusCode,
+      errors.CHALLENGE_NOT_EXISTS.errorCode,
+      errors.CHALLENGE_NOT_EXISTS.errorMsg
+    );
+  }
+
+  let allAccumlate = await AccumlateCertifies.find(
+    { challengeId : challengeId },
+    { challengeId: false, writerId: false, __v: false, _id: false}
+  );
+  allAccumlate.sort((a,b) =>  {
+    if (a.challengeCount < b.challengeCount) return 1;
+    if (a.challengeCount > b.challengeCount) return -1;
+  });
+
+  res.status(httpStatus.OK).json(allAccumlate);
+};
+  
+router.get(
+  "/getchallengerank", 
+  body("challengeId").exists(),
+  validation,
+  verifyToken,
+  asyncWrapper(getChallengeAccumulate)  
+);
+
+//챌린지 전체 누적 정보 출력
 router.get("/testaccumlate", verifyToken, async (req, res) => {
   let allAccumlate = await AccumlateCertifies.find();
   res.status(httpStatus.OK).json(allAccumlate);
 });
 
+//챌린지 누적정보 임의 조작 기능
+router.put("/manipulateAccumlate", verifyToken, async (req, res) => {
+  const { id } = req.body;
+  await AccumlateCertifies.updateOne(
+    {_id: id},
+    { $inc: { challengeCount: +1 }}
+  );
+  res.status(httpStatus.OK).send('누적정보 1 추가');
+})
+
 // 챌린지 인증하기
 const certifyingChallenge = async (req, res) => {
   const { challengeId } = req.params;
   const { imageUrl, certifyingContents } = req.body;
-  const today = new Date();
+  let today = new Date();
   today.setHours(0, 0, 0, 0);
+  const lastDay = new Date();
+  lastDay.setHours(0, 0, 0, 0);
+  lastDay.setDate(lastDay.getDate()-1);
 
   const challenge = await Challenge.findById(challengeId);
 
@@ -219,12 +268,24 @@ const certifyingChallenge = async (req, res) => {
 
   //인증글 스키마에 이미 참여했으면 1일 누적, 처음이면 1일 시작
   const accumlate = await AccumlateCertifies.findOne(filter);
-
   if (accumlate) {
-    let accumlateInfo = await AccumlateCertifies.findOne(filter);
-    await AccumlateCertifies.findOneAndUpdate(filter, {
-      challengeCount: accumlateInfo.challengeCount + 1,
-    });
+    const lastCertify = await ChallengeCertify.findOne(
+      { challengeId: challengeId,
+        writerId: res.locals.client.id,
+        dateCreated: lastDay
+      },);
+    if (lastCertify) {
+      await AccumlateCertifies.findOneAndUpdate(
+        filter,
+        { $inc: { challengeCount: +1 } }
+      );
+    }
+    else { 
+      await AccumlateCertifies.findOneAndUpdate(
+        filter,
+        { $set: { challengeCount: 1 } }
+      )
+    }
   } else {
     const accumlatecertifies = new AccumlateCertifies();
     accumlatecertifies.challengeId = challengeId;
@@ -255,32 +316,38 @@ router.get("/test1", async (req, res) => {
 
 //오늘 인증한 해당 챌린지 인증글 조회
 const getCertifiedChallenge = async (req, res) => {
-  const { clientId, challengeId } = req.params;
+  const { challengeId, authorId } = req.body;
 
   const today = new Date();
   today.setHours(0, 0, 0, 0);
+  today.setDate(today.getDate()+1);
 
-  const challenges = await ChallengeCertify.findOne({
-    dateCreated: today,
-    authorId: clientId,
-    challengeId,
-  });
-
-  res.status(httpStatus.OK).json({ completed: challenges ? true : false });
+  const challenges = await ChallengeCertify.findOne(
+    { dateCreated: today },
+    { authorId: authorId },
+    { challengeId: challengeId }
+  );
+res.status(httpStatus.OK).json(challenges);
 };
 
 router.get(
-  "/challengecertify/:challengeId/:clientId",
-  param("challengeId").exists(),
-  validation,
+  "/challengecertify",
   verifyToken,
+  body("challengeId").exists(),
+  body("authorId").exists(),
+  validation,
   asyncWrapper(getCertifiedChallenge)
 );
 
-//챌린지 누적 정보 모두 조회
-router.get("/accumulate", async (req, res) => {
-  let write = await AccumlateCertifies.find();
-  res.send(write);
-});
+//인증글 모두 조회 기능
+const getCertifies = async(req, res) => {
+  const allCertifies = await ChallengeCertify.find();
+  res.json(allCertifies);
+}
+router.get(
+  "/getcertifies",
+  asyncWrapper(getCertifies)
+);
 
 export default router;
+
