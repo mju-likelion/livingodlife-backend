@@ -53,6 +53,8 @@ export const getGetUrl = (key) => {
     Key: key,
     expires: 100,
   });
+
+  return url;
 };
 
 export default upload;
