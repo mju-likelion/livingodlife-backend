@@ -6,8 +6,8 @@ import File from "../models/file";
 
 const router = Router();
 
-router.get("/", async (req, res) => {
-  const key = v4();
+router.get("/:key", async (req, res) => {
+  const { key } = req.params;
 
   const url = getGetUrl(key);
   res.status(httpStatus.OK).json({ url, key });
