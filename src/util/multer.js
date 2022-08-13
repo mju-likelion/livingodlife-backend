@@ -49,9 +49,9 @@ export const getPutUrl = (key) => {
 
 export const getGetUrl = (key) => {
   const url = s3.getSignedUrl("getObject", {
-    Buckt: bucketName,
+    Bucket: bucketName,
     Key: key,
-    expires: 100,
+    Expires: 100,
   });
 
   return url;
