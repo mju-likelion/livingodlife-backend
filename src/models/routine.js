@@ -21,6 +21,12 @@ const routineSchema = new mongoose.Schema({
     required: true,
   },
 
+  // 루틴 종류
+  routineType: {
+    type: String,
+    required: true,
+  },
+
   // 루틴에 참여하고 있는 사람들
   routineClients: [mongoose.Schema.Types.ObjectId],
 });
