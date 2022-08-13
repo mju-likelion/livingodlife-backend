@@ -1,8 +1,8 @@
 import { Router } from "express";
 import httpStatus from "http-status";
 import { v4 } from "uuid";
-import upload, { getGetUrl, getPutUrl, getUrl } from "../util/multer";
-import File from "../models/file";
+import { getGetUrl, getPutUrl } from "../util/multer";
+
 
 const router = Router();
 
