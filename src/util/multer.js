@@ -1,4 +1,7 @@
 import AWS from "aws-sdk";
+
+const bucketName = proecss.env.bucket;
+
 AWS.config.update({
   signatureVersion: "v4",
   region: "ap-northeast-2",
@@ -20,7 +23,7 @@ const s3 = new AWS.S3();
 const upload = multer({
   storage: multerS3({
     s3: s3client,
-    bucket: "livingodlife",
+    bucket: bucketName,
     metadata: function (req, file, cb) {
       cb(null, { fieldName: file.fieldname });
     },
@@ -36,7 +39,7 @@ export const getUrl = async (key) => {
   const file = await File.findOne({ key });
 
   const url = s3.getSignedUrl("getObject", {
-    Bucket: "livingodlife",
+    Bucket: bucketName,
     Key: key,
     Expires: 100,
     ResponseContentDisposition: 'attachment; filename ="' + file.filename + '"',
