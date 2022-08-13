@@ -312,7 +312,7 @@ router.get("/test1", async (req, res) => {
 
 //오늘 인증한 해당 챌린지 인증글 조회
 const getCertifiedChallenge = async (req, res) => {
-  const { challengeId, authorId } = req.body;
+  const { challengeId, authorId } = req.query;
 
   const today = new Date();
   today.setHours(0, 0, 0, 0);
@@ -329,8 +329,8 @@ const getCertifiedChallenge = async (req, res) => {
 router.get(
   "/challengecertify",
   verifyToken,
-  body("challengeId").exists(),
-  body("authorId").exists(),
+  query("challengeId").exists(),
+  query("authorId").exists(),
   validation,
   asyncWrapper(getCertifiedChallenge)
 );
