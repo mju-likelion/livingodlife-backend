@@ -347,7 +347,7 @@ const getCertifiedChallenges = async (req, res) => {
   const challenges = await ChallengeCertify.find({
     //dateCreated: today,
     challengeId: challengeId,
-  });
+  }).sort({ dateCreated: -1 });
 
   res.status(httpStatus.OK).json(challenges);
 };
