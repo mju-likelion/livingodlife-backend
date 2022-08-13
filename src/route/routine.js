@@ -226,6 +226,7 @@ app.post(
   body("routineName").exists(),
   body("routineContents").exists(),
   body("routinePlan").exists(),
+  body("routineType").exists(),
   validation,
   verifyToken,
   asyncWrapper(createRoutine)
@@ -264,7 +265,7 @@ app.get(
 );
 
 app.get(
-  "/",
+  "/:type",
   param("type").exists(),
   validation,
   verifyToken,
