@@ -28,5 +28,3 @@ export const getGetUrl = (key) => {
 
   return url;
 };
-
-export default upload;
