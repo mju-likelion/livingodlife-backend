@@ -1,6 +1,6 @@
 import AWS from "aws-sdk";
 
-const bucketName = proecss.env.bucket;
+const bucketName = process.env.bucket;
 
 AWS.config.update({
   signatureVersion: "v4",
