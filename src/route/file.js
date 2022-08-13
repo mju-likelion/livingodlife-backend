@@ -10,14 +10,14 @@ router.get("/", async (req, res) => {
   const key = v4();
 
   const url = getGetUrl(key);
-  res.status(httpStatus.OK).json({ url });
+  res.status(httpStatus.OK).json({ url, key });
 });
 
 router.put("/", async (req, res) => {
   const key = v4();
 
   const url = getPutUrl(key);
-  res.status(httpStatus.OK).json({ url });
+  res.status(httpStatus.OK).json({ url, key });
 });
 
 export default router;
