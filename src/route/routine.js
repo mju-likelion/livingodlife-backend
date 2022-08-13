@@ -19,7 +19,7 @@ const app = Router();
  * @param {Response} res
  */
 const createRoutine = async (req, res) => {
-  const { routineName, routineContents, routinePlan } = req.body;
+  const { routineName, routineContents, routinePlan, routineType } = req.body;
 
   if (await Routine.exists({ routineName })) {
     throw new APIError(
@@ -34,6 +34,7 @@ const createRoutine = async (req, res) => {
   routine.routineContents = routineContents;
   routine.routinePlan = routinePlan;
   routine.routineClients = [res.locals.client.id];
+  routine.routineType = routineType;
 
   await routine.save();
 
@@ -187,7 +188,9 @@ const completeRoutine = async (req, res) => {
  * @param {Response} res
  */
 const getRoutine = async (req, res) => {
+  const { type } = req.params;
   const routines = await Routine.find({
+    routineType: type,
     routineClients: {
       $in: res.locals.client.id,
     },
@@ -260,6 +263,12 @@ app.get(
   asyncWrapper(getCompletedRoutine)
 );
 
-app.get("/", verifyToken, asyncWrapper(getRoutine)); // 루틴조회
+app.get(
+  "/",
+  param("type").exists(),
+  validation,
+  verifyToken,
+  asyncWrapper(getRoutine)
+); // 루틴조회
 
 export default app;
