@@ -7,8 +7,10 @@ AWS.config.update({
   region: "ap-northeast-2",
 });
 
+/*
 var credentials = new AWS.SharedIniFileCredentials({ profile: "default" });
 AWS.config.credentials = credentials;
+*/
 
 import { v4 } from "uuid";
 import File from "../models/file";
@@ -18,6 +20,7 @@ const multer = require("multer");
 const multerS3 = require("multer-s3");
 
 const s3client = new S3Client();
+
 const s3 = new AWS.S3();
 
 const upload = multer({
