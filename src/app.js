@@ -5,7 +5,7 @@ mongoose.connect(
   "mongodb+srv://livingodlife:FnjzDCcLuSholnnX@cluster0.rvzulm5.mongodb.net/?retryWrites=true&w=majority"
 );
 
-import express from "express";
+import express, { application } from "express";
 
 const app = express();
 app.use(express.json());
@@ -31,6 +31,9 @@ app.use("/friend", friends);
 
 import file from "./route/file";
 app.use("/file", file);
+
+import sympathy from "./route/sympathy";
+app.use("/sympathy", sympathy);
 
 app.use((err, req, res, next) => {
   console.log(err);

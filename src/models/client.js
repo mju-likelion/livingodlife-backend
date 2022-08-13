@@ -21,6 +21,12 @@ const clientSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  profile: {
+    type: String,
+    default: "default",
+  }
+}, {
+  timestamps: true
 });
 
 const Client = mongoose.model("clients", clientSchema); //모델 이름이 Clients임을 선언함

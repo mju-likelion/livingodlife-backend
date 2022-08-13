@@ -1,3 +1,4 @@
+//친구 정보 스키마
 import mongoose from "mongoose";
 
 const friendSchema = new mongoose.Schema({
