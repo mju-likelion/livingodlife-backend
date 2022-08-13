@@ -13,6 +13,7 @@ import AccumlateCertifies from "../models/accumlateCertifies";
 
 import { verifyToken } from "../middleware/verifyTK";
 import mongoose, { Mongoose, Types } from "mongoose";
+import { getUrl } from "../util/multer";
 
 const router = Router();
 
@@ -323,7 +324,16 @@ const getCertifiedChallenge = async (req, res) => {
     authorId,
     challengeId,
   });
-  res.status(httpStatus.OK).json(challenges);
+
+  if (challenges) {
+    const field = {
+      ...challenges._doc,
+      imageUrl: await getUrl(challenges.imageUrl),
+    };
+    res.status(httpStatus.OK).json(field);
+  } else {
+    res.status(httpStatus.OK).send();
+  }
 };
 
 router.get(
