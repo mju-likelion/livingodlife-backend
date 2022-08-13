@@ -31,9 +31,8 @@ const upload = multer({
       cb(null, { fieldName: file.fieldname });
     },
     key: function (req, file, cb) {
-      const fileid = v4();
-
-      cb(null, fileid);
+      const key = v4() + "/" + file.originalname;
+      cb(null, key);
     },
   }),
 });
