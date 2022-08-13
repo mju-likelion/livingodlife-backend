@@ -357,7 +357,15 @@ const getCertifiedChallenges = async (req, res) => {
     challengeId: challengeId,
   });
 
-  res.status(httpStatus.OK).json(challenges);
+  const imageInjectionChallenges = [];
+  for (const challenge of challenges) {
+    imageInjectionChallenges.push({
+      ...challenge._doc,
+      imageUrl: await getUrl(challenge.imageUrl),
+    });
+  }
+
+  res.status(httpStatus.OK).json(imageInjectionChallenges);
 };
 
 router.get(
