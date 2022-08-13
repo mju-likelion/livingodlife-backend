@@ -45,7 +45,6 @@ export const getUrl = async (key) => {
     Bucket: bucketName,
     Key: key,
     Expires: 100,
-    ResponseContentDisposition: 'attachment; filename ="' + file.filename + '"',
   });
 
   return url;
