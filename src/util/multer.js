@@ -37,16 +37,22 @@ const upload = multer({
   }),
 });
 
-export const getUrl = async (key) => {
-  const file = await File.findOne({ key });
-
-  const url = s3.getSignedUrl("getObject", {
+export const getPutUrl = (key) => {
+  const url = s3.getSignedUrl("putObject", {
     Bucket: bucketName,
     Key: key,
-    Expires: 100,
+    Expires: 1000,
   });
 
   return url;
+};
+
+export const getGetUrl = (key) => {
+  const url = s3.getSignedUrl("getObject", {
+    Buckt: bucketName,
+    Key: key,
+    expires: 100,
+  });
 };
 
 export default upload;

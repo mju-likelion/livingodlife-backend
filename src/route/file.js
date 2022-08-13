@@ -1,25 +1,23 @@
 import { Router } from "express";
 import httpStatus from "http-status";
 import { v4 } from "uuid";
-import upload, { getUrl } from "../util/multer";
+import upload, { getGetUrl, getPutUrl, getUrl } from "../util/multer";
 import File from "../models/file";
 
 const router = Router();
 
-router.post("/", upload.single("image"), async (req, res) => {
-  const fname = req.file.originalname;
+router.get("/", async (req, res) => {
+  const key = v4();
 
-  const file = new File({
-    key: req.file.key,
-    filename: fname,
-  });
+  const url = getGetUrl(key);
+  res.status(httpStatus.OK).json({ url });
+});
 
-  await file.save();
+router.put("/", async (req, res) => {
+  const key = v4();
 
-  res.status(httpStatus.OK).send({
-    key: req.file.key,
-    url: await getUrl(req.file.key),
-  });
+  const url = getPutUrl(key);
+  res.status(httpStatus.OK).json({ url });
 });
 
 export default router;
