@@ -14,6 +14,7 @@ import AccumlateCertifies from "../models/accumlateCertifies";
 import { verifyToken } from "../middleware/verifyTK";
 import mongoose, { Mongoose, Types } from "mongoose";
 import { getUrl } from "../util/multer";
+import { restart } from "nodemon";
 
 const router = Router();
 
@@ -371,5 +372,29 @@ const getCertifies = async (req, res) => {
   res.json(challenges);
 };
 router.get("/getcertifies", verifyToken, asyncWrapper(getCertifies));
+
+const searchChallenge = async (req, res) => {
+  const { category, name } = req.query;
+  const filter = [{ $text: { $search: name } }];
+
+  if (category) {
+    filter.push({
+      challengeCategory: category,
+    });
+  }
+
+  const challenges = await Challenge.find({
+    $and: filter,
+  });
+
+  res.status(httpStatus.OK).send(challenges);
+};
+
+router.get(
+  "/search",
+  verifyToken,
+  query("name").exists(),
+  asyncWrapper(searchChallenge)
+);
 
 export default router;
