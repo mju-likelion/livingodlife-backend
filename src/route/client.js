@@ -188,6 +188,20 @@ router.get(
   asyncWrapper(getClientByName)
 );
 
+/**
+ *
+ * @param {Request} req
+ * @param {Response} res
+ */
+const completeTest = async (req, res) => {
+  const { id } = res.locals.client;
+
+  await Client.findByIdAndUpdate(id, { $set: { testing: true } });
+  res.status(httpStatus.NO_CONTENT).send();
+};
+
+router.post("/test", verifyToken, asyncWrapper(completeTest));
+
 //테스트
 router.get("/test", verifyToken, (req, res) => {
   res.json(req.decoded);
