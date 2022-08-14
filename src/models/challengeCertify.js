@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 
 //이미지 경로, 내용, 고객ID 챌린지ID, 누적
 const certifyingChallengesSchema = new mongoose.Schema({
-  // 이미지 주소
+  // 이미지 주소(키값 넣기) 
   imageUrl: {
     type: String,
   },

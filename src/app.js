@@ -29,6 +29,9 @@ app.use("/routine", routines);
 import friends from "./route/friend";
 app.use("/friend", friends);
 
+import file from "./route/file";
+app.use("/file", file);
+
 app.use((err, req, res, next) => {
   console.log(err);
   res.status(err.statusCode || 500).send(err);
