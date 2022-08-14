@@ -166,7 +166,7 @@ router.get("/", verifyToken, async (req, res) => {
 
 //해당 챌린지 랭킹 조회
 const getChallengeAccumulate = async (req, res) => {
-  const { challengeId } = req.body;
+  const { challengeId } = req.params;
   const challenge = await Challenge.findById(challengeId);
 
   //해당 챌린지가 challenge객체 내 존재하는지
@@ -191,8 +191,8 @@ const getChallengeAccumulate = async (req, res) => {
 };
 
 router.get(
-  "/getchallengerank",
-  body("challengeId").exists(),
+  "/getchallengerank/:challengeId",
+  param("challengeId").exists(),
   validation,
   verifyToken,
   asyncWrapper(getChallengeAccumulate)
@@ -367,7 +367,7 @@ const getCertifies = async (req, res) => {
 
   const challenges = await ChallengeCertify.find({
     dateCreated: today,
-  })
+  });
   res.json(challenges);
 };
 router.get("/getcertifies", verifyToken, asyncWrapper(getCertifies));
