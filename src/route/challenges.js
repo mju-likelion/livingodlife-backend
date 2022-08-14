@@ -345,7 +345,7 @@ const getCertifiedChallenges = async (req, res) => {
   today.setHours(0, 0, 0, 0);
 
   const challenges = await ChallengeCertify.find({
-    //dateCreated: today,
+    dateCreated: today,
     challengeId: challengeId,
   }).sort({ dateCreated: -1 });
 
@@ -354,17 +354,22 @@ const getCertifiedChallenges = async (req, res) => {
 
 router.get(
   "/challengecertifies",
-  //verifyToken,
+  verifyToken,
   query("challengeId").exists(),
   validation,
   asyncWrapper(getCertifiedChallenges)
 );
 
-//인증글 모두 조회 기능
+//오늘의 인증글 모두 조회 기능
 const getCertifies = async (req, res) => {
-  const allCertifies = await ChallengeCertify.find();
-  res.json(allCertifies);
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const challenges = await ChallengeCertify.find({
+    dateCreated: today,
+  })
+  res.json(challenges);
 };
-router.get("/getcertifies", asyncWrapper(getCertifies));
+router.get("/getcertifies", verifyToken, asyncWrapper(getCertifies));
 
 export default router;
