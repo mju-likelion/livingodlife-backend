@@ -156,7 +156,7 @@ const completeRoutine = async (req, res) => {
   }
 
   const today = new Date();
-  today.setHours(0, 0, 0, 0);
+  today.setUTCHours(0, 0, 0, 0);
 
   const completed = await RoutineCertify.exists({
     routineDate: today,
@@ -210,7 +210,7 @@ const getCompletedRoutine = async (req, res) => {
   const { clientId, routineId } = req.params;
 
   const today = new Date();
-  today.setHours(0, 0, 0, 0);
+  today.setUTCHours(0, 0, 0, 0);
 
   const routine = await RoutineCertify.findOne({
     routineDate: today,
