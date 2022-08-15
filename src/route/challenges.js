@@ -14,7 +14,6 @@ import AccumlateCertifies from "../models/accumlateCertifies";
 import { verifyToken } from "../middleware/verifyTK";
 import mongoose, { Mongoose, Types } from "mongoose";
 import { getUrl } from "../util/multer";
-import { restart } from "nodemon";
 
 const router = Router();
 
