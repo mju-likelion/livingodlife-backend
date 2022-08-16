@@ -362,12 +362,10 @@ router.get(
 
 //오늘의 인증글 모두 조회 기능
 const getCertifies = async (req, res) => {
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
+  // const today = new Date();
+  // today.setHours(0, 0, 0, 0);
 
-  const challenges = await ChallengeCertify.find({
-    dateCreated: today,
-  })
+  const challenges = await ChallengeCertify.find()
   res.json(challenges);
 };
 router.get("/getcertifies", verifyToken, asyncWrapper(getCertifies));

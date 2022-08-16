@@ -13,7 +13,11 @@ const likeSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     require: true,
   },
-
+  //좋아요 누른 사람 이름
+  name: {
+    type: String,
+    require: true,
+  }
 });
 
 const Like = mongoose.model("like", likeSchema);
