@@ -20,7 +20,7 @@ import Like from "../models/like";
 
 const router = Router();
 
-//post 유저아이디, 컨텐츠아이디 받아오기 좋아요 눌렀을때 안눌러져있을때는 객체 생성, 눌러져있는 상태에서 눌렀을때는 삭제 
+//post 유저아이디, 컨텐츠아이디 받아오기 좋아요 눌렀을때 안눌러져있을때는 객체 생성
 const addLike = async (req, res) => {
     const { contentId } = req.params;
     const clientId = res.locals.client.id;
@@ -33,15 +33,13 @@ const addLike = async (req, res) => {
         }
     );
 
-    //좋아요가 눌러져 있는 경우 좋아요 취소(delete)
+    //좋아요가 눌러져 있는 경우 에러
     if (likeCheck) { 
-        await Like.deleteOne(
-            {
-                clientId: clientId,
-                contentId: contentId
-            }
-        )
-        res.status(httpStatus.OK).send();
+        throw new APIError(
+            errors.ALREADY_SELECTED.statusCode,
+            errors.ALREADY_SELECTED.errorCode,
+            errors.ALREADY_SELECTED.errorMsg
+          );
     } else {
         //없으면 좋아요 누르기
         const like = new Like();
@@ -61,6 +59,45 @@ router.post(
     asyncWrapper(addLike)
 );
 
+//좋아요 취소
+const deleteLike = async(req, res) => {
+    const { contentId } = req.params;
+    const clientId = res.locals.client.id;
+    //좋아요 여부 확인
+    const likeCheck = await Like.findOne(
+        {
+            clientId: clientId,
+            contentId: contentId,
+        }
+    );
+        //좋아요가 눌러져 있는 경우 좋아요 취소하기
+        if (likeCheck) { 
+            await Like.deleteOne(
+                {
+                    clientId: clientId,
+                    contentId: contentId
+                }
+            )
+        } else {
+            //없으면 에러 발생
+            throw new APIError(
+                errors.ALREADY_CANCELLED.statusCode,
+                errors.ALREADY_CANCELLED.errorCode,
+                errors.ALREADY_CANCELLED.errorMsg
+              );
+            
+        }
+   res.status(httpStatus.OK).send();
+}
+
+router.delete(
+    "/:contentId",
+    verifyToken,
+    param("contentId").exists(),
+    validation,
+    asyncWrapper(deleteLike)
+);
+
 //해당 인증글 좋아요 개수 확인 get, 컨텐츠 아이디 검색으로 좋아요 갯수 카운트
 
 const countLike = async (req, res) => {
@@ -75,7 +112,7 @@ const countLike = async (req, res) => {
     );
 };
 
-router.put(
+router.get(
     "/count/:contentId",
     param("contentId").exists(),
     validation,
@@ -89,7 +126,7 @@ const whoPressedLike = async(req, res) => {
     res.status(httpStatus.OK).json(likeList);
 }
 
-router.put(
+router.get(
     "/:contentId",
     param("contentId").exists(),
     validation,
