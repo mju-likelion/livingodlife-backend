@@ -16,37 +16,121 @@ import mongoose, { Mongoose, Types } from "mongoose";
 import { getUrl } from "../util/multer";
 import ChallengeCertify from "../models/challengeCertify";
 import Comment from "../models/comment";
+import Like from "../models/like";
 
 const router = Router();
 
-//좋아요 눌렀을때 post, 유저아이디, 컨텐츠아이디 받아오기
+//post 유저아이디, 컨텐츠아이디 받아오기 좋아요 눌렀을때 안눌러져있을때는 객체 생성
 const addLike = async (req, res) => {
     const { contentId } = req.params;
-    const clientId = res.local.client.id;
+    const clientId = res.locals.client.id;
 
-    if (await ChallengeCertify.exists({ challengeName }) && await Comment.exists({}) ) {
+    //좋아요 여부 확인
+    const likeCheck = await Like.findOne(
+        {
+            clientId: clientId,
+            contentId: contentId,
+        }
+    );
+
+    //좋아요가 눌러져 있는 경우 에러
+    if (likeCheck) { 
         throw new APIError(
-          errors.CHALLENGE_ALREADY_EXISTS.statusCode,
-          errors.CHALLENGE_ALREADY_EXISTS.errorCode,
-          errors.CHALLENGE_ALREADY_EXISTS.errorMsg
-        );
-      }
-    //챌린지 인증글에 해당 아이디가 존재하는지 검색
-    let contentList = ChallengeCertify.findOne({_id : contentId})
-    //챌린지 인증글에 해당 아이디가 존재한다면
-    if (contentList) {
+            errors.ALREADY_SELECTED.statusCode,
+            errors.ALREADY_SELECTED.errorCode,
+            errors.ALREADY_SELECTED.errorMsg
+          );
+    } else {
+        //없으면 좋아요 누르기
+        const like = new Like();
+        like.clientId = clientId;
+        like.contentId = contentId;
+        like.name = res.locals.client.name;
+        await like.save();
 
-    } 
-}
+        res.status(httpStatus.OK).send();
+    }
+};
 router.post(
     "/:contentId",
     verifyToken,
     param("contentId").exists(),
     validation,
     asyncWrapper(addLike)
-)
+);
+
+//좋아요 취소
+const deleteLike = async(req, res) => {
+    const { contentId } = req.params;
+    const clientId = res.locals.client.id;
+    //좋아요 여부 확인
+    const likeCheck = await Like.findOne(
+        {
+            clientId: clientId,
+            contentId: contentId,
+        }
+    );
+        //좋아요가 눌러져 있는 경우 좋아요 취소하기
+        if (likeCheck) { 
+            await Like.deleteOne(
+                {
+                    clientId: clientId,
+                    contentId: contentId
+                }
+            )
+        } else {
+            //없으면 에러 발생
+            throw new APIError(
+                errors.ALREADY_CANCELLED.statusCode,
+                errors.ALREADY_CANCELLED.errorCode,
+                errors.ALREADY_CANCELLED.errorMsg
+              );
+            
+        }
+   res.status(httpStatus.OK).send();
+}
+
+router.delete(
+    "/:contentId",
+    verifyToken,
+    param("contentId").exists(),
+    validation,
+    asyncWrapper(deleteLike)
+);
+
 //해당 인증글 좋아요 개수 확인 get, 컨텐츠 아이디 검색으로 좋아요 갯수 카운트
 
-//좋아요 취소 delete 유저아이디, 컨텐츠아이디 받아오기
+const countLike = async (req, res) => {
+    //contentId로 검색해서 리스트에 저장한 후 리스트의 길이 리턴하기
+    const { contentId } = req.params;
+    const likeList = await Like.find( { contentId: contentId } );
+    let count = Object.keys(likeList).length;
+    res.status(httpStatus.OK).json(
+        {
+            "likeCount": count
+        }
+    );
+};
+
+router.get(
+    "/count/:contentId",
+    param("contentId").exists(),
+    validation,
+    asyncWrapper(countLike)
+);
+
+//누가 좋아요 눌렀는지 리스트 검색
+const whoPressedLike = async(req, res) => { 
+    const { contentId } = req.params;
+    const likeList = await Like.find( { contentId: contentId }, { _id: false, contentId: false, clientId: false, __v: false } );
+    res.status(httpStatus.OK).json(likeList);
+}
+
+router.get(
+    "/:contentId",
+    param("contentId").exists(),
+    validation,
+    asyncWrapper(whoPressedLike)
+)
 
 export default router;
