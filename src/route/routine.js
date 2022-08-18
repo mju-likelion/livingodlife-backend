@@ -255,6 +255,23 @@ const getCompletedRoutine = async (req, res) => {
   res.status(httpStatus.OK).json({ completed: routine ? true : false });
 };
 
+//루틴 누적일 조회
+/**
+ *
+ * @param {Request} req
+ * @param {Response} res
+ */
+const getAccumlate = async (req, res) => {
+  const { routineId } = req.params;
+  const accumlateInfo =  await AccumlateCertifies.findOne({
+    contentId: routineId,
+    writerId: res.locals.client.id
+  },
+  { contentId: false, writerId: false, __v: false, _id: false, writerName: false }
+  );
+  res.status(httpStatus.OK).json(accumlateInfo);
+};
+
 app.post(
   "/",
   body("routineName").exists(),
@@ -305,5 +322,13 @@ app.get(
   verifyToken,
   asyncWrapper(getRoutine)
 ); // 루틴조회
+
+app.get(
+  "/accumlate/:routineId/",
+  param("routineId").exists(),
+  validation,
+  verifyToken,
+  asyncWrapper(getAccumlate)
+); //루틴 누적일 조회
 
 export default app;
