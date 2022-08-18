@@ -139,6 +139,11 @@ const errors = {
     statusCode: 400,
     errorMsg: "이미 좋아요가 취소되어 있습니다."
   },
+  COMMENT_NOT_EXISTS: {
+    errorCode: "COMMENT_NOT_EXISTS",
+    statusCode: 404,
+    errorMsg: "존재하지 않는 댓글입니다",
+  },
 };
 
 export default errors;

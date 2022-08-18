@@ -252,7 +252,6 @@ const certifyingChallenge = async (req, res) => {
     challengeId: challengeId,
     authorId: res.locals.client.id,
   });
-
   if (challengecertify) {
     throw new APIError(
       errors.ALREADY_ATHENTICATED.statusCode,
@@ -295,7 +294,7 @@ const certifyingChallenge = async (req, res) => {
     }
   } else {
     const accumlatecertifies = new AccumlateCertifies();
-    accumlatecertifies.contentId = contentId;
+    accumlatecertifies.contentId = challengeId;
     accumlatecertifies.writerId = res.locals.client.id;
     accumlatecertifies.writerName = res.locals.client.name;
 
