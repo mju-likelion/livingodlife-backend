@@ -23,6 +23,9 @@ const accumlateChallengesSchema = new mongoose.Schema({
     writerName: {
       type: String
     },
+    contentCategory: {
+      type: Number,
+    }
   });
 
   const AccumlateCertifies = mongoose.model(

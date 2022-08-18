@@ -179,12 +179,12 @@ const getChallengeAccumulate = async (req, res) => {
   }
 
   let allAccumlate = await AccumlateCertifies.find(
-    { challengeId: challengeId },
-    { challengeId: false, writerId: false, __v: false, _id: false }
+    { contentId: challengeId },
+    { contentId: false, writerId: false, __v: false, _id: false }
   );
   allAccumlate.sort((a, b) => {
-    if (a.challengeCount < b.challengeCount) return 1;
-    if (a.challengeCount > b.challengeCount) return -1;
+    if (a.contentCount < b.contentCount) return 1;
+    if (a.contentCount > b.contentCount) return -1;
   });
 
   res.status(httpStatus.OK).json(allAccumlate);
@@ -209,7 +209,7 @@ router.put("/manipulateAccumlate", verifyToken, async (req, res) => {
   const { id } = req.body;
   await AccumlateCertifies.updateOne(
     { _id: id },
-    { $inc: { challengeCount: +1 } }
+    { $inc: { contentCount: +1 } }
   );
   res.status(httpStatus.OK).send("누적정보 1 추가");
 });
