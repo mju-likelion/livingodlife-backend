@@ -159,10 +159,20 @@ router.delete(
 );
 
 //챌린지 조회
-router.get("/", verifyToken, async (req, res) => {
-  let allChallenges = await Challenge.find();
-  res.status(httpStatus.OK).json(allChallenges);
-});
+router.get(
+  "/",
+  verifyToken,
+  asyncWrapper(async (req, res) => {
+    const { id } = res.locals.client;
+
+    let allChallenges = await Challenge.find({
+      clients: {
+        $in: [id],
+      },
+    });
+    res.status(httpStatus.OK).json(allChallenges);
+  })
+);
 
 //해당 챌린지 랭킹 조회
 const getChallengeAccumulate = async (req, res) => {
@@ -373,18 +383,16 @@ const getCertifies = async (req, res) => {
 router.get("/getcertifies", verifyToken, asyncWrapper(getCertifies));
 
 const searchChallenge = async (req, res) => {
-  const { category, name } = req.query;
-  const filter = [{ $text: { $search: name } }];
+  const { name } = req.query;
+  const filter = {
+    challengeName: {
+      $regex: new RegExp(`${name}`),
+    },
+  };
 
-  if (category) {
-    filter.push({
-      challengeCategory: category,
-    });
-  }
+  console.log(filter);
 
-  const challenges = await Challenge.find({
-    $and: filter,
-  });
+  const challenges = await Challenge.find(filter);
 
   res.status(httpStatus.OK).send(challenges);
 };
