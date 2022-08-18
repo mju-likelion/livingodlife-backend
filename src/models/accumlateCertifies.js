@@ -23,6 +23,7 @@ const accumlateChallengesSchema = new mongoose.Schema({
     writerName: {
       type: String
     },
+    //컨텐츠 카테고리 챌린지의 경우 1, 루틴의 경우 2
     contentCategory: {
       type: Number,
     }
