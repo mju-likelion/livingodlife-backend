@@ -90,7 +90,7 @@ router.delete(
 // );//댓글 수정하기
 
 router.get(
-    "/getcomment/:contentId",
+    "/:contentId",
     param("contentId").exists(),
     validation,
     verifyToken,
