@@ -289,6 +289,40 @@ const getAccumlate = async (req, res) => {
   res.status(httpStatus.OK).json(accumlateInfo);
 };
 
+// 완료한 루틴 & 전체 루틴 개수
+
+/**
+ *
+ * @param {Request} req
+ * @param {Response} res
+ */
+const getRoutineCounts = async (req, res) => {
+  const { id } = res.locals.client;
+
+  const routines = await Routine.find({ routineClients: { $in: id } });
+
+  const today = new Date();
+  today.setUTCHours(0, 0, 0, 0);
+
+  let completed = 0;
+
+  for (const routine of routines) {
+    const certifyExists = await RoutineCertify.exists({
+      routineId: routine.id,
+      client: id,
+      routineDate: today,
+    });
+    if (certifyExists) {
+      completed += 1;
+    }
+  }
+
+  res.json({
+    routineCount: routines.length,
+    completedRoutineCount: completed,
+  });
+};
+
 app.post(
   "/",
   body("routineName").exists(),
@@ -347,6 +381,13 @@ app.get(
   validation,
   verifyToken,
   asyncWrapper(getAccumlate)
+); //루틴 누적일 조회
+
+app.get(
+  "/count/count",
+  validation,
+  verifyToken,
+  asyncWrapper(getRoutineCounts)
 ); //루틴 누적일 조회
 
 export default app;
