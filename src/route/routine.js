@@ -133,10 +133,11 @@ const exitRoutine = async (req, res) => {
  */
 const completeRoutine = async (req, res) => {
   const { routineId } = req.params;
+  const { id: clientId } = res.locals.client;
 
   const routine = await Routine.findById(routineId);
 
-  if (!routine) { 
+  if (!routine) {
     throw new APIError(
       errors.ROUTINE_NOT_EXISTS.statusCode,
       errors.ROUTINE_NOT_EXISTS.errorCode,
@@ -158,12 +159,15 @@ const completeRoutine = async (req, res) => {
 
   const today = new Date();
   today.setUTCHours(0, 0, 0, 0);
+
   const lastDay = new Date();
   lastDay.setUTCHours(0, 0, 0, 0);
   lastDay.setDate(lastDay.getDate() - 1);
 
   const completed = await RoutineCertify.exists({
     routineDate: today,
+    client: clientId,
+    routineId,
   });
 
   if (completed) {
@@ -246,13 +250,19 @@ const getCompletedRoutine = async (req, res) => {
   const today = new Date();
   today.setUTCHours(0, 0, 0, 0);
 
-  const routine = await RoutineCertify.findOne({
+  const filter = {
     routineDate: today,
     client: clientId,
     routineId,
-  });
+  };
 
-  res.status(httpStatus.OK).json({ completed: routine ? true : false });
+  console.log(filter);
+
+  const routine = await RoutineCertify.exists(filter);
+
+  console.log(routine);
+
+  res.status(httpStatus.OK).json({ completed: routine });
 };
 
 //루틴 누적일 조회
@@ -263,11 +273,18 @@ const getCompletedRoutine = async (req, res) => {
  */
 const getAccumlate = async (req, res) => {
   const { routineId } = req.params;
-  const accumlateInfo =  await AccumlateCertifies.findOne({
-    contentId: routineId,
-    writerId: res.locals.client.id
-  },
-  { contentId: false, writerId: false, __v: false, _id: false, writerName: false }
+  const accumlateInfo = await AccumlateCertifies.findOne(
+    {
+      contentId: routineId,
+      writerId: res.locals.client.id,
+    },
+    {
+      contentId: false,
+      writerId: false,
+      __v: false,
+      _id: false,
+      writerName: false,
+    }
   );
   res.status(httpStatus.OK).json(accumlateInfo);
 };
@@ -310,6 +327,7 @@ app.post(
 app.get(
   "/complete/:routineId/:clientId",
   param("routineId").exists(),
+  param("clientId").exists(),
   validation,
   verifyToken,
   asyncWrapper(getCompletedRoutine)
