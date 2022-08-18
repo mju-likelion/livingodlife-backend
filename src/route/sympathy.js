@@ -7,15 +7,8 @@ import asyncWrapper from "../util/asyncWrapper";
 import APIError from "../util/apiError";
 import errors from "../util/errors";
 
-import Challenge from "../models/challenge";
-import like from "../models/like";
-import comment from "../models/comment";
-
 import { verifyToken } from "../middleware/verifyTK";
 import mongoose, { Mongoose, Types } from "mongoose";
-import { getUrl } from "../util/multer";
-import ChallengeCertify from "../models/challengeCertify";
-import Comment from "../models/comment";
 import Like from "../models/like";
 
 const router = Router();

@@ -35,6 +35,9 @@ app.use("/file", file);
 import sympathy from "./route/sympathy";
 app.use("/sympathy", sympathy);
 
+import comment from "./route/comment";
+app.use("/comment", comment);
+
 import feed from "./route/feed";
 app.use("/feed", feed);
 
