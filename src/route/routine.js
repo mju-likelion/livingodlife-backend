@@ -374,6 +374,20 @@ const setRoutineDay = async (req, res) => {
   res.status(httpStatus.NO_CONTENT).send();
 };
 
+const findRoutine = async (req, res) => {
+  const { routineId } = req.params;
+
+  const routineInfo = await Routine.findById( routineId );
+  res.status(httpStatus.NO_CONTENT).json();
+};
+
+app.get(
+  "/find/:routineId",
+  param("routineId").not.isEmpty(),
+  validation,
+  verifyToken,
+  asyncWrapper(findRoutine)
+); //원하는 루틴 검색
 app.post(
   "/",
   body("routineName").not().isEmpty(),
