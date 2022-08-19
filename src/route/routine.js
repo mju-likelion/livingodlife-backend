@@ -378,12 +378,19 @@ const findRoutine = async (req, res) => {
   const { routineId } = req.params;
 
   const routineInfo = await Routine.findById( routineId );
-  res.status(httpStatus.NO_CONTENT).json();
+  if (!routineId) {
+    throw new APIError(
+      errors.ROUTINE_NOT_EXISTS.statusCode,
+      errors.ROUTINE_NOT_EXISTS.errorCode,
+      errors.ROUTINE_NOT_EXISTS.errorMsg
+    );
+  }
+  res.status(httpStatus.NO_CONTENT).json(routineInfo);
 };
 
 app.get(
   "/find/:routineId",
-  param("routineId").not.isEmpty(),
+  param("routineId").not().isEmpty(),
   validation,
   verifyToken,
   asyncWrapper(findRoutine)

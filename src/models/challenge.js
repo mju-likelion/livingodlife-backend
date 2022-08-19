@@ -14,7 +14,6 @@ const challengesSchema = new mongoose.Schema({
     type: String,
     default: "기본", //아무것도 지정하지 않았을때 카테고리 기본으로 지정
   },
-
   // 챌린지 참여자들
   clients: [mongoose.Schema.Types.ObjectId],
 });
