@@ -160,7 +160,13 @@ router.delete(
 
 //챌린지 조회
 router.get("/", verifyToken, async (req, res) => {
-  let allChallenges = await Challenge.find();
+  let allChallenges = await Challenge.find(
+    {
+      clients: {
+        $in: res.locals.client.id,
+      },
+    }
+  );
   res.status(httpStatus.OK).json(allChallenges);
 });
 
