@@ -323,6 +323,19 @@ const getRoutineCounts = async (req, res) => {
   });
 };
 
+/**
+ *
+ * @param {Request} req
+ * @param {Response} res
+ */
+const setRoutineDay = async (req, res) => {
+  const { routineId } = req.params;
+  const { routineDay } = req.body;
+
+  await Routine.findByIdAndUpdate(routineId, { $set: { routineDay } });
+  res.status(httpStatus.NO_CONTENT).send();
+};
+
 app.post(
   "/",
   body("routineName").not().isEmpty(),
@@ -388,6 +401,15 @@ app.get(
   validation,
   verifyToken,
   asyncWrapper(getRoutineCounts)
+); //루틴 누적일 조회
+
+app.post(
+  "/day/:routineId",
+  param("routineId").not().isEmpty(),
+  body("routineDay").isArray({ min: 7, max: 7 }),
+  validation,
+  verifyToken,
+  asyncWrapper(setRoutineDay)
 ); //루틴 누적일 조회
 
 export default app;

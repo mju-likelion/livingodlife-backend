@@ -29,6 +29,12 @@ const routineSchema = new mongoose.Schema({
 
   // 루틴에 참여하고 있는 사람들
   routineClients: [mongoose.Schema.Types.ObjectId],
+
+  // 루틴 요일  (월 -> 일)
+  routineDay: {
+    type: Array,
+    default: [false, false, false, false, false, false, false],
+  },
 });
 
 const Routine = mongoose.model("routines", routineSchema); //모델 이름이 Video임을 선언함

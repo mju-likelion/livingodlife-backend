@@ -15,6 +15,7 @@ export function verifyToken(req, res, next) {
 
       return next();
     } catch (error) {
+      console.log(error);
       //헤더 혹은 페이로드가 위변조 되었는지, 토큰의 유효기간이 초과되었는지 확인
       if (error.name === "TokenExpiredError") {
         // 유효기간 초과
