@@ -202,6 +202,22 @@ const completeTest = async (req, res) => {
 
 router.post("/test", verifyToken, asyncWrapper(completeTest));
 
+const setProfileImg = async (req, res) => {
+  const { id } = res.locals.client;
+  const { profile } = req.body;
+  await Client.findByIdAndUpdate(id, { $set: { profile } });
+
+  res.status(httpStatus.NO_CONTENT).send();
+};
+
+router.post(
+  "/profile",
+  verifyToken,
+  body("profile").not().isEmpty(),
+  validation,
+  asyncWrapper(setProfileImg)
+);
+
 //테스트
 router.get("/test", verifyToken, (req, res) => {
   res.json(req.decoded);
