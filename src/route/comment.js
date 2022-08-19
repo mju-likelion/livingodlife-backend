@@ -59,14 +59,25 @@ const deleteComment = async(req,res) => {
  * @param {Request} req
  * @param {Response} res
  */
- const getComment = async(req,res) => {
-    const { contentId } = req.params
+const getComment = async(req,res) => {
+    const { contentId } = req.params;
     const commentInfo = await Comment.find(
         { contentId: contentId },
-        { _id: false, contentId: false, clientId: false, __v: false}
+        { _id: false, contentId: false, __v: false}
     );
     res.status(httpStatus.OK).json(commentInfo);
 };
+
+const getCount = async (req, res) => {
+    const { contentId } = req.params;
+    const commentCount = await Comment.find({ contentId:contentId });
+    let count = commentCount.length;
+    res.status(httpStatus.OK).json(
+        {
+            "commentCount": count
+        }
+    );
+}
 
 router.post(
     "/:contentId",
@@ -97,4 +108,11 @@ router.get(
     asyncWrapper(getComment)
 );//댓글 조회하기
 
+router.get(
+    "/count/:contentId",
+    param("contentId").not().isEmpty(),
+    validation,
+    verifyToken,
+    asyncWrapper(getCount)
+);//댓글 개수 조회 
 export default router;
