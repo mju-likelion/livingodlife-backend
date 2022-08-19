@@ -106,6 +106,12 @@ const errors = {
     errorMsg: "이미 존재하는 루틴 이름입니다",
   },
 
+  ROUTINE_CANT_COMPLETE: {
+    errorCode: "ROUTINE_CANT_COMPLETE",
+    statusCode: 400,
+    errorMsg: "오늘은 루틴을 완료할 수 없습니다",
+  },
+
   ROUTINE_ALREADY_PARTICIPATE: {
     errorCode: "ROUTINE_ALREADY_PARTICIPATE",
     statusCode: 400,
@@ -132,12 +138,12 @@ const errors = {
   ALREADY_SELECTED: {
     errorCode: "ALEADY_SELECTED",
     statusCode: 400,
-    errorMsg: "이미 좋아요가 눌러져 있습니다."
+    errorMsg: "이미 좋아요가 눌러져 있습니다.",
   },
   ALREADY_CANCELLED: {
     errorCode: "ALREADY_CANCELLED",
     statusCode: 400,
-    errorMsg: "이미 좋아요가 취소되어 있습니다."
+    errorMsg: "이미 좋아요가 취소되어 있습니다.",
   },
   COMMENT_NOT_EXISTS: {
     errorCode: "COMMENT_NOT_EXISTS",

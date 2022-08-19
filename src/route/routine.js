@@ -160,9 +160,47 @@ const completeRoutine = async (req, res) => {
   const today = new Date();
   today.setUTCHours(0, 0, 0, 0);
 
+  const routineDays = [];
+
+  for (let i = 0; i < 7; i++) {
+    const eachDay = routine.routineDay[i];
+    routineDays.push(eachDay);
+  }
+
+  const routineDayIndex = routineDays.findIndex((d) => today.getDay());
+  if (routineDayIndex === -1) {
+    // 오늘은 루틴 마킹이 안되는 날  ~
+
+    throw new APIError(
+      errors.ROUTINE_CANT_COMPLETE.statusCode,
+      errors.ROUTINE_CANT_COMPLETE.errorCode,
+      errors.ROUTINE_CANT_COMPLETE.errorMsg
+    );
+  }
+
+  prevIndex = routineDayIndex - 1;
+  if (prevIndex < 0) {
+    prevIndex += eachDay.length;
+  }
+
+  let dayDelta = 0;
+
+  if (routineDays.length === 1) {
+    dayDelta = 7;
+  } else {
+    if (routineDayIndex > prevIndex) {
+      dayDelta = routineDayIndex - prevIndex;
+    } else {
+      dayDelta = 7 - prevIndex + routineDayIndex;
+    }
+  }
+
+  today.getDay();
+
   const lastDay = new Date();
   lastDay.setUTCHours(0, 0, 0, 0);
-  lastDay.setDate(lastDay.getDate() - 1);
+  lastDay.setDate(lastDay.getDate() - dayDelta);
+  // -1
 
   const completed = await RoutineCertify.exists({
     routineDate: today,
