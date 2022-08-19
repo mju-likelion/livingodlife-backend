@@ -26,7 +26,7 @@ const getFeed = async (req, res) => {
   const certifyItems = [];
 
   let today = new Date();
-  today.setUTCHours(0, 0, 0, 0);
+  today.setHours(0, 0, 0, 0);
 
   for (const challengeId of challengeIds) {
     const challengeCertifies = await ChallengeCertify.find({

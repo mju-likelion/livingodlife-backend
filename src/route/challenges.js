@@ -219,10 +219,10 @@ const certifyingChallenge = async (req, res) => {
   const { challengeId } = req.params;
   const { imageUrl, certifyingContents } = req.body;
   let today = new Date();
-  today.setUTCHours(0, 0, 0, 0);
+  today.setHours(0, 0, 0, 0);
 
   const lastDay = new Date();
-  lastDay.setUTCHours(0, 0, 0, 0);
+  lastDay.setHours(0, 0, 0, 0);
   lastDay.setDate(lastDay.getDate() - 1);
 
   const challenge = await Challenge.findById(challengeId);
@@ -315,7 +315,7 @@ const getCertifiedChallenge = async (req, res) => {
   const { challengeId, authorId } = req.query;
 
   const today = new Date();
-  today.setUTCHours(0, 0, 0, 0);
+  today.setHours(0, 0, 0, 0);
   today.setDate(today.getDate() + 1);
 
   const challenges = await ChallengeCertify.findOne({
@@ -341,7 +341,7 @@ const getCertifiedChallenges = async (req, res) => {
   const { challengeId } = req.query;
 
   const today = new Date();
-  today.setUTCHours(0, 0, 0, 0);
+  today.setHours(0, 0, 0, 0);
 
   const challenges = await ChallengeCertify.find({
     dateCreated: today,
@@ -362,7 +362,7 @@ router.get(
 //오늘의 인증글 모두 조회 기능
 const getCertifies = async (req, res) => {
   const today = new Date();
-  today.setUTCHours(0, 0, 0, 0);
+  today.setHours(0, 0, 0, 0);
 
   const challenges = await ChallengeCertify.find({
     dateCreated: today,

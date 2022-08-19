@@ -158,7 +158,7 @@ const completeRoutine = async (req, res) => {
   }
 
   const today = new Date();
-  today.setUTCHours(0, 0, 0, 0);
+  today.setHours(0, 0, 0, 0);
 
   const routineDays = [];
 
@@ -198,7 +198,7 @@ const completeRoutine = async (req, res) => {
   today.getDay();
 
   const lastDay = new Date();
-  lastDay.setUTCHours(0, 0, 0, 0);
+  lastDay.setHours(0, 0, 0, 0);
   lastDay.setDate(lastDay.getDate() - dayDelta);
   // -1
 
@@ -286,7 +286,7 @@ const getCompletedRoutine = async (req, res) => {
   const { clientId, routineId } = req.params;
 
   const today = new Date();
-  today.setUTCHours(0, 0, 0, 0);
+  today.setHours(0, 0, 0, 0);
 
   const filter = {
     routineDate: today,
@@ -340,7 +340,7 @@ const getRoutineCounts = async (req, res) => {
   const routines = await Routine.find({ routineClients: { $in: id } });
 
   const today = new Date();
-  today.setUTCHours(0, 0, 0, 0);
+  today.setHours(0, 0, 0, 0);
 
   let completed = 0;
 
