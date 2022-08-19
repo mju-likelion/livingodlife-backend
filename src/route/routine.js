@@ -180,7 +180,7 @@ const completeRoutine = async (req, res) => {
 
   let prevIndex = routineDayIndex - 1;
   if (prevIndex < 0) {
-    prevIndex += eachDay.length;
+    prevIndex += routineDays.length;
   }
 
   let dayDelta = 0;
