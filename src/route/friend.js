@@ -61,7 +61,7 @@ const addFriend = async (req, res) => {
 
 router.post(
   "/",
-  body("friend").exists(),
+  body("friend").not().isEmpty(),
   validation,
   verifyToken,
   asyncWrapper(addFriend)
@@ -108,7 +108,7 @@ const removeFriend = async (req, res) => {
 
 router.delete(
   "/",
-  body("friend").exists(),
+  body("friend").not().isEmpty(),
   validation,
   verifyToken,
   asyncWrapper(removeFriend)

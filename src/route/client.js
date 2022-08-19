@@ -76,9 +76,9 @@ const postClient = async (req, res) => {
 router.post(
   "/",
 
-  body("email").exists(),
-  body("password").exists(),
-  body("name").exists(),
+  body("email").not().isEmpty(),
+  body("password").not().isEmpty(),
+  body("name").not().isEmpty(),
   validation,
 
   asyncWrapper(postClient)
@@ -136,8 +136,8 @@ const checkLogIn = async (req, res) => {
 };
 router.put(
   "/",
-  body("email").exists(),
-  body("password").exists(),
+  body("email").not().isEmpty(),
+  body("password").not().isEmpty(),
   validation,
   asyncWrapper(checkLogIn)
 );
@@ -183,7 +183,7 @@ const getClientByName = async (req, res) => {
 
 router.get(
   "/name/:name",
-  param("name"),
+  param("name").not().isEmpty(),
   validation,
   asyncWrapper(getClientByName)
 );

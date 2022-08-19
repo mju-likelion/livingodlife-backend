@@ -51,8 +51,8 @@ router.post(
   "/",
   verifyToken,
 
-  body("challengeName").exists(),
-  body("challengeCategory").exists(),
+  body("challengeName").not().isEmpty(),
+  body("challengeCategory").not().isEmpty(),
   validation,
 
   asyncWrapper(createChallenge)
@@ -101,7 +101,7 @@ const participateChallenge = async (req, res) => {
 router.post(
   "/:challengeId",
 
-  param("challengeId").exists(),
+  param("challengeId").not().isEmpty(),
   validation,
 
   verifyToken,
@@ -152,27 +152,17 @@ router.delete(
   "/:challengeId",
   verifyToken,
 
-  param("challengeId").exists(),
+  param("challengeId").not().isEmpty(),
   validation,
 
   asyncWrapper(exitChallenge)
 );
 
 //챌린지 조회
-router.get(
-  "/",
-  verifyToken,
-  asyncWrapper(async (req, res) => {
-    const { id } = res.locals.client;
-
-    let allChallenges = await Challenge.find({
-      clients: {
-        $in: [id],
-      },
-    });
-    res.status(httpStatus.OK).json(allChallenges);
-  })
-);
+router.get("/", verifyToken, async (req, res) => {
+  let allChallenges = await Challenge.find();
+  res.status(httpStatus.OK).json(allChallenges);
+});
 
 //해당 챌린지 랭킹 조회
 const getChallengeAccumulate = async (req, res) => {
@@ -202,7 +192,7 @@ const getChallengeAccumulate = async (req, res) => {
 
 router.get(
   "/getchallengerank/:challengeId",
-  param("challengeId").exists(),
+  param("challengeId").not().isEmpty(),
   validation,
   verifyToken,
   asyncWrapper(getChallengeAccumulate)
@@ -305,9 +295,9 @@ const certifyingChallenge = async (req, res) => {
 
 router.post(
   "/complete/:challengeId",
-  param("challengeId").exists(),
-  body("certifyingContents").exists(),
-  body("imageUrl").exists(),
+  param("challengeId").not().isEmpty(),
+  body("certifyingContents").not().isEmpty(),
+  body("imageUrl").not().isEmpty(),
   validation,
 
   verifyToken,
@@ -340,8 +330,8 @@ const getCertifiedChallenge = async (req, res) => {
 router.get(
   "/challengecertify",
   verifyToken,
-  query("challengeId").exists(),
-  query("authorId").exists(),
+  query("challengeId").not().isEmpty(),
+  query("authorId").not().isEmpty(),
   validation,
   asyncWrapper(getCertifiedChallenge)
 );
@@ -364,7 +354,7 @@ const getCertifiedChallenges = async (req, res) => {
 router.get(
   "/challengecertifies",
   verifyToken,
-  query("challengeId").exists(),
+  query("challengeId").not().isEmpty(),
   validation,
   asyncWrapper(getCertifiedChallenges)
 );
@@ -382,16 +372,18 @@ const getCertifies = async (req, res) => {
 router.get("/getcertifies", verifyToken, asyncWrapper(getCertifies));
 
 const searchChallenge = async (req, res) => {
-  const { name } = req.query;
-  const filter = {
-    challengeName: {
-      $regex: new RegExp(`${name}`),
-    },
-  };
+  const { category, name } = req.query;
+  const filter = [{ $text: { $search: name } }];
 
-  console.log(filter);
+  if (category) {
+    filter.push({
+      challengeCategory: category,
+    });
+  }
 
-  const challenges = await Challenge.find(filter);
+  const challenges = await Challenge.find({
+    $and: filter,
+  });
 
   res.status(httpStatus.OK).send(challenges);
 };
@@ -399,7 +391,7 @@ const searchChallenge = async (req, res) => {
 router.get(
   "/search",
   verifyToken,
-  query("name").exists(),
+  query("name").not().isEmpty(),
   asyncWrapper(searchChallenge)
 );
 

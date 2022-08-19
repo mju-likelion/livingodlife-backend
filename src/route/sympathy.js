@@ -47,7 +47,7 @@ const addLike = async (req, res) => {
 router.post(
     "/:contentId",
     verifyToken,
-    param("contentId").exists(),
+    param("contentId").not().isEmpty(),
     validation,
     asyncWrapper(addLike)
 );
@@ -86,7 +86,7 @@ const deleteLike = async(req, res) => {
 router.delete(
     "/:contentId",
     verifyToken,
-    param("contentId").exists(),
+    param("contentId").not().isEmpty(),
     validation,
     asyncWrapper(deleteLike)
 );
@@ -107,7 +107,7 @@ const countLike = async (req, res) => {
 
 router.get(
     "/count/:contentId",
-    param("contentId").exists(),
+    param("contentId").not().isEmpty(),
     validation,
     asyncWrapper(countLike)
 );
@@ -121,7 +121,7 @@ const whoPressedLike = async(req, res) => {
 
 router.get(
     "/:contentId",
-    param("contentId").exists(),
+    param("contentId").not().isEmpty(),
     validation,
     asyncWrapper(whoPressedLike)
 )

@@ -70,8 +70,8 @@ const deleteComment = async(req,res) => {
 
 router.post(
     "/:contentId",
-    param("contentId").exists(),
-    body("content").exists(),
+    param("contentId").not().isEmpty(),
+    body("content").not().isEmpty(),
     validation,
     verifyToken,
     asyncWrapper(leaveComment)
@@ -79,7 +79,7 @@ router.post(
 
 router.delete(
     "/:commentId",
-    param("commentId").exists(),
+    param("commentId").not().isEmpty(),
     validation,
     verifyToken,
     asyncWrapper(deleteComment)
@@ -91,7 +91,7 @@ router.delete(
 
 router.get(
     "/:contentId",
-    param("contentId").exists(),
+    param("contentId").not().isEmpty(),
     validation,
     verifyToken,
     asyncWrapper(getComment)

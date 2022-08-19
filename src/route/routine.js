@@ -325,10 +325,10 @@ const getRoutineCounts = async (req, res) => {
 
 app.post(
   "/",
-  body("routineName").exists(),
-  body("routineContents").exists(),
-  body("routinePlan").exists(),
-  body("routineType").exists(),
+  body("routineName").not().isEmpty(),
+  body("routineContents").not().isEmpty(),
+  body("routinePlan").not().isEmpty(),
+  body("routineType").not().isEmpty(),
   validation,
   verifyToken,
   asyncWrapper(createRoutine)
@@ -336,7 +336,7 @@ app.post(
 
 app.post(
   "/:routineId",
-  param("routineId").exists(),
+  param("routineId").not().isEmpty(),
   validation,
   verifyToken,
   asyncWrapper(participateRoutine)
@@ -344,7 +344,7 @@ app.post(
 
 app.delete(
   "/:routineId",
-  param("routineId").exists(),
+  param("routineId").not().isEmpty(),
   validation,
   verifyToken,
   asyncWrapper(exitRoutine)
@@ -352,7 +352,7 @@ app.delete(
 
 app.post(
   "/complete/:routineId",
-  param("routineId").exists(),
+  param("routineId").not().isEmpty(),
   validation,
   verifyToken,
   asyncWrapper(completeRoutine)
@@ -360,8 +360,8 @@ app.post(
 
 app.get(
   "/complete/:routineId/:clientId",
-  param("routineId").exists(),
-  param("clientId").exists(),
+  param("routineId").not().isEmpty(),
+  param("clientId").not().isEmpty(),
   validation,
   verifyToken,
   asyncWrapper(getCompletedRoutine)
@@ -369,7 +369,7 @@ app.get(
 
 app.get(
   "/:type",
-  param("type").exists(),
+  param("type").not().isEmpty(),
   validation,
   verifyToken,
   asyncWrapper(getRoutine)
@@ -377,7 +377,7 @@ app.get(
 
 app.get(
   "/accumlate/:routineId/",
-  param("routineId").exists(),
+  param("routineId").not().isEmpty(),
   validation,
   verifyToken,
   asyncWrapper(getAccumlate)
