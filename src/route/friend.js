@@ -85,7 +85,8 @@ const removeFriend = async (req, res) => {
     );
   }
 
-  const friendInstance = await Friend.findOne({ owner: friend });
+  const friendInstance = await Friend.findOne({ owner: clientId });
+
   if (!friendInstance.friends.find((id) => id.equals(friend))) {
     throw new APIError(
       errors.ALREADY_NOT_FRIEND.statusCode,
