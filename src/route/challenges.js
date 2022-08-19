@@ -372,18 +372,14 @@ const getCertifies = async (req, res) => {
 router.get("/getcertifies", verifyToken, asyncWrapper(getCertifies));
 
 const searchChallenge = async (req, res) => {
-  const { category, name } = req.query;
-  const filter = [{ $text: { $search: name } }];
-
-  if (category) {
-    filter.push({
-      challengeCategory: category,
-    });
-  }
-
-  const challenges = await Challenge.find({
-    $and: filter,
-  });
+  const { name } = req.query;
+  const filter = {
+    challengeName: {
+      $regex: new RegExp(`${name}`),
+    },
+  };
+  
+  const challenges = await Challenge.find(filter);
 
   res.status(httpStatus.OK).send(challenges);
 };
