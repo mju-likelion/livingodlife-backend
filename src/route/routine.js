@@ -178,7 +178,7 @@ const completeRoutine = async (req, res) => {
     );
   }
 
-  prevIndex = routineDayIndex - 1;
+  let prevIndex = routineDayIndex - 1;
   if (prevIndex < 0) {
     prevIndex += eachDay.length;
   }
