@@ -96,7 +96,7 @@ const removeFriend = async (req, res) => {
   }
 
   await Friend.findOneAndUpdate(
-    { owner: friend },
+    { owner: clientId },
     {
       $pull: {
         friends: friend,
